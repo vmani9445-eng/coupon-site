@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Store {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  websiteUrl  String?
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  coupons     Coupon[]
+}
+
+model Coupon {
+  id            String        @id @default(cuid())
+  title         String
+  description   String?
+  code          String?
+  discount      String?
+  category      String?
+  bank          String?
+  affiliateUrl  String?
+  expiresAt     DateTime?
+  verified      Boolean       @default(true)
+  isFeatured    Boolean       @default(false)
+  status        CouponStatus  @default(PUBLISHED)
+  clicks        Int           @default(0)
+  usesToday     Int           @default(0)
+  storeSlug     String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  store         Store         @relation(fields: [storeSlug], references: [slug], onDelete: Cascade)
+}
+
+model CouponSubmission {
+  id           String            @id @default(cuid())
+  storeName    String
+  storeSlug    String?
+  title        String
+  description  String?
+  code         String?
+  discount     String?
+  category     String?
+  affiliateUrl String?
+  submitter    String?
+  notes        String?
+  status       SubmissionStatus @default(PENDING)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+enum CouponStatus {
+  DRAFT
+  PUBLISHED
+  EXPIRED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

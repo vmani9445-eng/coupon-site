@@ -1,0 +1,44 @@
+
+
+
+npx prisma generate
+npx prisma migrate dev --name init
+xxxx
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  coupons     Coupon[]
+}
+
+model Coupon {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  code        String?
+  discount    String?
+  category    String?
+  bank        String?
+  expiresAt   DateTime?
+  verified    Boolean  @default(true)
+  users       Int      @default(0)
+  storeSlug   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  store       Store    @relation(fields: [storeSlug], references: [slug], onDelete: Cascade)
+}

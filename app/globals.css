@@ -1,26 +1,1295 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-soft: #fafbfc;
+  --line: #e8ebf2;
+  --line-soft: #eef1f6;
+  --text: #171c2a;
+  --muted: #677286;
+  --blue: #2d58d6;
+  --blue-soft: #eef3ff;
+  --green: #2d8a58;
+  --green-soft: #edf8f1;
+  --orange: #cd6b3c;
+  --orange-soft: #fff1e8;
+  --shadow: 0 4px 16px rgba(15, 23, 42, 0.035);
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --container: 1220px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.42;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.pageContainer,
+.headerWrap {
+  width: min(var(--container), calc(100% - 28px));
+  margin: 0 auto;
+}
+
+.headerWrap {
+  padding-top: 16px;
+}
+
+.headerBox {
+  min-height: 68px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  gap: 14px;
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.headerNav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.headerNav a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2a3243;
+}
+
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ghostBtn {
+  border: 1px solid var(--line);
+  background: #f3f5fa;
+  color: #4c5d86;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: 0;
+  background: var(--blue);
+  color: white;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.storePage {
+  display: grid;
+  gap: 12px;
+  padding: 16px 0 34px;
+}
+
+.storeHeroCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  box-shadow: var(--shadow);
+}
+
+.storeHeroLogoPanel {
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: var(--surface-soft);
+  padding: 12px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: 136px;
+}
+
+.storeHeroLogoBox {
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  border: 1px solid #eadfce;
+  background: #f7efe5;
+  display: grid;
+  place-items: center;
+  color: #d4662f;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.storeHeroOfferText {
+  margin: 10px 0 0;
+  font-size: 0.88rem;
+  color: #4c5668;
+}
+
+.storeHeroContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.storeBreadcrumb {
+  margin: 0 0 4px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.storeTitle {
+  margin: 0;
+  font-size: clamp(1.7rem, 2vw, 2.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.storeSubtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.storeTagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.storeTag {
+  border: 1px solid var(--line);
+  background: #fbfcfe;
+  color: #556173;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.storeTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.storeTab {
+  min-width: 94px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: #2a3140;
+  border-radius: 12px;
+  padding: 9px 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  font-size: 0.92rem;
+}
+
+.storeTab.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+.storeLayoutGrid {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.filtersCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+
+.filtersTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.filtersTop h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.clearFiltersBtn {
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.filtersGroup h4 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.filtersList {
+  display: grid;
+  gap: 10px;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #2f3748;
+  font-size: 0.92rem;
+}
+
+.filterRow input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--blue);
+}
+
+.offersList {
+  display: grid;
+  gap: 10px;
+}
+
+.offerCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 92px 1fr 136px;
+  gap: 14px;
+  align-items: start;
+  box-shadow: var(--shadow);
+}
+
+.offerDiscountBox {
+  width: 100%;
+  min-height: 88px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #fcfdff;
+  text-align: center;
+  margin-top: 48px;
+  margin-left: 15px;
+}
+
+.offerDiscountBox span {
+  display: block;
+  color: var(--blue);
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.offerDiscountBox strong {
+  display: block;
+  color: var(--blue);
+  font-size: 0.88rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.offerBody {
+  display: grid;
+  gap: 7px;
+  margin-left: 31px;
+}
+
+.offerBadgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.miniPill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 0.74rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.miniPillGreen {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.miniPillOrange {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
+.miniPillBlue {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.offerUsers {
+  font-size: 0.84rem;
+  color: #2c3546;
+  font-weight: 600;
+}
+
+.offerTitle {
+  margin: 0;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  line-height: 1.13;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.offerDescription {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.offerBankText {
+  margin: 0;
+  color: var(--blue);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.offerMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #5f697c;
+  font-size: 0.86rem;
+}
+
+.offerInfoPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.offerInfoPills span {
+  border: 1px solid var(--line);
+  background: #fbfcfe;
+  color: #667286;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.viewDetailsBtn {
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.offerDetailsBox {
+  margin-top: 1px;
+  border: 1px solid var(--line);
+  background: #fbfcfe;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.offerDetailsText {
+  margin: 0 0 7px;
+  color: #586476;
+  font-size: 0.88rem;
+}
+
+.offerTermsList {
+  margin: 0;
+  padding-left: 16px;
+  color: #4f5b6d;
+  font-size: 0.88rem;
+}
+
+.offerTermsList li + li {
+  margin-top: 4px;
+}
+
+.offerActionArea {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+
+.revealBtn {
+  width: 128px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid #dbe1ed;
+  background: #fafbff;
+  color: var(--blue);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.revealBtn:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.couponPreviewBox {
+  width: 128px;
+  min-height: 56px;
+  border: 1px dashed #d9dfeb;
+  border-radius: 12px;
+  background: #fdfdff;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 8px;
+  color: #5d687b;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.emptyBox,
+.notFoundCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.revealBtn,
+.storeTab,
+.ghostBtn,
+.primaryBtn,
+.couponCopyBtn,
+.couponModalGhostBtn,
+.couponModalPrimaryBtn,
+.viewDetailsBtn {
+  transition: all 0.18s ease;
+}
+
+.offerCard:hover,
+.filtersCard:hover,
+.storeHeroCard:hover {
+  border-color: #dde3ee;
+}
+
+.storeTab:hover,
+.revealBtn:hover,
+.primaryBtn:hover,
+.couponModalPrimaryBtn:hover {
+  transform: translateY(-1px);
+}
+
+.ghostBtn:hover,
+.couponCopyBtn:hover,
+.couponModalGhostBtn:hover {
+  background: #eef2f7;
+}
+
+.viewDetailsBtn:hover {
+  opacity: 0.8;
+}
+
+.couponModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 28, 42, 0.42);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.couponModal {
+  width: min(100%, 500px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  padding: 18px;
+  position: relative;
+  animation: couponModalIn 0.2s ease;
+}
+
+@keyframes couponModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.couponModalClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: #4f5b6d;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.couponModalTop {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 16px;
+  padding-right: 28px;
+}
+
+.couponModalLogo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid #eadfce;
+  background: #f7efe5;
+  display: grid;
+  place-items: center;
+  color: #d4662f;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.couponModalHeadings {
+  display: grid;
+  gap: 4px;
+}
+
+.couponModalStore {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.couponModalTitle {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.couponModalSubtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.couponModalCodeWrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.couponModalCode {
+  min-height: 46px;
+  border: 1px dashed #d9dfeb;
+  border-radius: 12px;
+  background: #fdfdff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.couponCopyBtn {
+  min-width: 82px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f3f5fa;
+  color: #344054;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.couponModalMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.couponModalMeta span {
+  border: 1px solid var(--line);
+  background: #fbfcfe;
+  color: #5c677a;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.couponModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.couponModalGhostBtn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #445063;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.couponModalPrimaryBtn {
+  border: 0;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .offerCard {
+    grid-template-columns: 90px 1fr;
+  }
+
+  .offerActionArea {
+    grid-column: 1 / -1;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .headerBox {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .storeHeroCard {
+    grid-template-columns: 1fr;
+  }
+
+  .storeLayoutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .pageContainer,
+  .headerWrap {
+    width: min(100%, calc(100% - 14px));
+  }
+
+  .headerBox {
+    border-radius: 16px;
+    padding: 10px 12px;
+  }
+
+  .headerNav {
+    gap: 14px;
+  }
+
+  .headerButtons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .storePage {
+    padding: 12px 0 24px;
+  }
+
+  .storeHeroCard {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .storeHeroLogoPanel {
+    min-height: auto;
+  }
+
+  .storeTitle {
+    font-size: 1.65rem;
+  }
+
+  .storeTabs {
+    gap: 7px;
+  }
+
+  .storeTab {
+    flex: 1 1 calc(50% - 7px);
+    min-width: unset;
+    padding: 9px 10px;
+  }
+
+  .filtersCard,
+  .offerCard {
+    border-radius: 16px;
+  }
+
+  .offerCard {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .offerDiscountBox {
+    min-height: 76px;
+  }
+
+  .offerActionArea {
+    justify-items: stretch;
+  }
+
+  .revealBtn,
+  .couponPreviewBox {
+    width: 100%;
+  }
+
+  .couponModal {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .couponModalTop {
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+  }
+
+  .couponModalLogo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+
+  .couponModalTitle {
+    font-size: 1rem;
+  }
+
+  .couponModalCodeWrap {
+    grid-template-columns: 1fr;
+  }
+
+  .couponCopyBtn,
+  .couponModalGhostBtn,
+  .couponModalPrimaryBtn {
+    width: 100%;
+  }
+
+  .couponModalActions {
+    flex-direction: column;
+  }
+}
+.storesDirectoryPage {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 20px 56px;
+}
+
+.storesHeroCard {
+  background: #ffffff;
+  border: 1px solid #e7ebf3;
+  border-radius: 28px;
+  padding: 30px 32px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  margin-bottom: 22px;
+}
+
+.storesBreadcrumb {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.storesHeroTitle {
+  margin: 0;
+  font-size: 46px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #111827;
+}
+
+.storesHeroSubtitle {
+  margin: 12px 0 0;
+  max-width: 720px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #667085;
+}
+
+.topStoresSection {
+  margin-bottom: 22px;
+}
+
+.sectionHeadingRow {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sectionHeadingRow h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  color: #111827;
+}
+
+.sectionHeadingRow p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 15px;
+}
+
+.topStoresGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.topStoreCard {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e7ebf3;
+  border-radius: 22px;
+  padding: 18px;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.topStoreCard:hover {
+  transform: translateY(-2px);
+  border-color: #d8deea;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
+}
+
+.topStoreLogo,
+.storeDirectoryLogo {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  border: 1px solid #e5eaf1;
+  color: #1f2937;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.topStoreBody,
+.storeDirectoryBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.topStoreHead,
+.storeDirectoryTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topStoreBody h3,
+.storeDirectoryTop h3 {
+  margin: 0;
+  font-size: 21px;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.storeDirectorySlug {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #7b8494;
+}
+
+.storeCategoryPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #f3f6fb;
+  border: 1px solid #e4eaf3;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.storeStatsRow,
+.storeDirectoryMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.storeStatsRow span {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.storesToolbarCard {
+  background: #ffffff;
+  border: 1px solid #e7ebf3;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  margin-bottom: 22px;
+}
+
+.storesSearchBox input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid #d9e1ec;
+  background: #fbfcfe;
+  font-size: 15px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.storesSearchBox input:focus {
+  border-color: #365edc;
+  box-shadow: 0 0 0 4px rgba(54, 94, 220, 0.08);
+}
+
+.storesCategoryTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.categoryTab {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid #dde4ee;
+  background: #ffffff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.categoryTab:hover {
+  border-color: #ccd6e4;
+  background: #f8fafc;
+}
+
+.categoryTab.active {
+  background: #2f5bd3;
+  border-color: #2f5bd3;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(47, 91, 211, 0.22);
+}
+
+.storesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.storeDirectoryCard {
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid #e7ebf3;
+  border-radius: 24px;
+  padding: 20px;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.storeDirectoryCard:hover {
+  transform: translateY(-2px);
+  border-color: #d7deea;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+}
+
+.metaStat {
+  min-width: 110px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+}
+
+.metaStat strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1;
+  color: #111827;
+}
+
+.metaStat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #667085;
+}
+
+.emptyStoresState {
+  background: #ffffff;
+  border: 1px solid #e7ebf3;
+  border-radius: 24px;
+  padding: 40px 24px;
+  text-align: center;
+  color: #667085;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.emptyStoresState h3 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 22px;
+}
+
+.emptyStoresState p {
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .topStoresGrid,
+  .storesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .storesHeroTitle {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 700px) {
+  .storesDirectoryPage {
+    padding: 20px 14px 40px;
+  }
+
+  .storesHeroCard,
+  .storesToolbarCard,
+  .storeDirectoryCard,
+  .topStoreCard {
+    border-radius: 20px;
+  }
+
+  .topStoresGrid,
+  .storesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .storesHeroTitle {
+    font-size: 32px;
+  }
+
+  .storeDirectoryCard,
+  .topStoreCard {
+    padding: 16px;
+  }
+
+  .storeDirectoryTop,
+  .topStoreHead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.storePageNew {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+}
+
+.storeHeroNew {
+  display: flex;
+  gap: 20px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #eee;
+}
+
+.logoBox {
+  width: 70px;
+  height: 70px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+.tagsRow span {
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-right: 6px;
+}
+
+.tabsRow {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.tabsRow button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  border: none;
+}
+
+.tabsRow .active {
+  background: #2563eb;
+  color: white;
+}
+
+.layoutNew {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+}
+
+.filtersNew {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+
+.cardsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.couponCardNew {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  transition: 0.2s;
+}
+
+.couponCardNew:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.discount {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.metaRow {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.bank {
+  margin-top: 6px;
+  color: #16a34a;
+  font-size: 13px;
+}
+
+.ctaBtn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
 }

@@ -1,0 +1,375 @@
+:root {
+  --admin-bg: #f5f7fb;
+  --admin-surface: #ffffff;
+  --admin-line: #e6eaf2;
+  --admin-text: #111827;
+  --admin-muted: #6b7280;
+  --admin-primary: #2563eb;
+  --admin-primary-dark: #1d4ed8;
+  --admin-radius: 18px;
+  --admin-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: Arial, sans-serif;
+}
+
+.adminLayout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.adminSidebar {
+  background: #0f172a;
+  color: #fff;
+  padding: 24px 18px;
+}
+
+.adminBrand {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.adminNav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adminNav a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  transition: 0.2s ease;
+}
+
+.adminNav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.adminContent {
+  padding: 28px;
+}
+
+.adminPageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.adminPageHeader h1 {
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+
+.adminPageHeader p {
+  margin: 0;
+  color: var(--admin-muted);
+}
+
+.adminStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.adminStatCard {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-line);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow);
+  padding: 20px;
+}
+
+.adminStatCard span {
+  display: block;
+  color: var(--admin-muted);
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.adminStatCard strong {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.adminPanel,
+.adminTableWrap {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-line);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow);
+  padding: 20px;
+}
+
+.adminButton {
+  border: 0;
+  background: var(--admin-primary);
+  color: #fff;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adminButton:hover {
+  background: var(--admin-primary-dark);
+}
+
+.adminTableWrap {
+  padding: 0;
+  overflow: hidden;
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.adminTable th,
+.adminTable td {
+  text-align: left;
+  padding: 16px;
+  border-bottom: 1px solid var(--admin-line);
+}
+
+.adminTable th {
+  background: #f8fafc;
+  font-size: 13px;
+  color: var(--admin-muted);
+}
+.adminModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.adminModal {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-line);
+  border-radius: 22px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.22);
+  padding: 24px;
+}
+
+.adminModalClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: var(--admin-text);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.adminModalHeader {
+  margin-bottom: 18px;
+}
+
+.adminModalHeader h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.adminModalHeader p {
+  margin: 0;
+  color: var(--admin-muted);
+}
+
+.adminForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.adminFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.adminField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adminFieldFull {
+  grid-column: 1 / -1;
+}
+
+.adminField label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.adminField input,
+.adminField textarea {
+  width: 100%;
+  border: 1px solid var(--admin-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+  color: var(--admin-text);
+}
+
+.adminField textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.adminCheckboxField {
+  justify-content: flex-end;
+}
+
+.adminCheckboxRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  font-size: 14px;
+  color: var(--admin-text);
+}
+
+.adminFormError {
+  margin: 0;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.adminModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.adminButtonGhost {
+  background: #eef2f7;
+  color: var(--admin-text);
+}
+
+.adminButtonGhost:hover {
+  background: #e5eaf1;
+}
+
+@media (max-width: 720px) {
+  .adminModal {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .adminFormGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.adminTableActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminTableActionBtn {
+  border: 0;
+  background: #eef2ff;
+  color: #1d4ed8;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adminTableActionBtn:hover {
+  background: #dfe7ff;
+}
+
+.adminTableActionBtnDanger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.adminTableActionBtnDanger:hover {
+  background: #fee2e2;
+}
+
+.adminTableActionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminDeleteWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adminInlineError {
+  margin: 0;
+  font-size: 12px;
+  color: #b42318;
+  max-width: 220px;
+}
+.adminImportGrid {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.adminImportWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adminImportMessage {
+  margin: 0;
+  font-size: 14px;
+  color: var(--admin-muted);
+}
+.adminField select {
+  width: 100%;
+  border: 1px solid var(--admin-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+  color: var(--admin-text);
+}
+.adminField select {
+  width: 100%;
+  border: 1px solid var(--admin-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+  color: var(--admin-text);
+}

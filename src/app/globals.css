@@ -2685,12 +2685,3 @@ input {
     flex-direction: column;
   }
 }
-.adminField select {
-  width: 100%;
-  border: 1px solid var(--admin-line);
-  border-radius: 14px;
-  padding: 12px 14px;
-  font: inherit;
-  background: #fff;
-  color: var(--admin-text);
-}

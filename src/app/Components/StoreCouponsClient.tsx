@@ -74,7 +74,7 @@ export default function StoreCouponsClient({ store }: Props) {
   const couponCount = store.coupons.filter((item) => item.type === "coupon").length;
   const dealCount = store.coupons.filter((item) => item.type === "deal").length;
 
- const bankOptions = Array.from(
+  const bankOptions = Array.from(
   new Set(
     store.coupons
       .map((item) => detectBankName(item.bankOffer))

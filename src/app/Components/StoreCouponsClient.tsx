@@ -74,13 +74,15 @@ export default function StoreCouponsClient({ store }: Props) {
   const couponCount = store.coupons.filter((item) => item.type === "coupon").length;
   const dealCount = store.coupons.filter((item) => item.type === "deal").length;
 
-  const bankOptions = Array.from(
-    new Set(
-      store.coupons
-        .map((item) => detectBankName(item.bankOffer))
-        .filter((item): item is string => Boolean(item))
-    )
-  );
+ const bankOptions = Array.from(
+  new Set(
+    store.coupons
+      .map((item) => detectBankName(item.bankOffer))
+      .filter((item): item is NonNullable<ReturnType<typeof detectBankName>> =>
+        item !== null
+      )
+  )
+);
 
   const filteredCoupons = useMemo(() => {
     return store.coupons.filter((item) => {

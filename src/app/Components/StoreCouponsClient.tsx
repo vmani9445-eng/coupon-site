@@ -1,4 +1,3 @@
-cat > app/Components/StoreCouponsClient.tsx <<'EOF'
 "use client";
 
 import { useEffect, useMemo, useState } from "react";

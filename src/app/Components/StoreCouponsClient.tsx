@@ -1,3 +1,4 @@
+cat > app/Components/StoreCouponsClient.tsx <<'EOF'
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -456,3 +457,4 @@ export default function StoreCouponsClient({ store }: Props) {
     </>
   );
 }
+EOF

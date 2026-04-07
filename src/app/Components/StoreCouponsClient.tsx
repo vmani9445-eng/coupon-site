@@ -409,9 +409,7 @@ export default function StoreCouponsClient({ store }: Props) {
                             ) : (
                               <>
                                 <li>Valid on selected products only.</li>
-                                <li>
-                                  Cannot be combined with some other offers.
-                                </li>
+                                <li>Cannot be combined with some other offers.</li>
                                 <li>Discount may vary by cart value.</li>
                               </>
                             )}

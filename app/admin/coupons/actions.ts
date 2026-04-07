@@ -1,5 +1,6 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
@@ -45,7 +46,7 @@ export async function createCoupon(formData: FormData) {
       source: "manual",
       title,
       description: description || null,
-      code: code || null, // if null → becomes DEAL
+      code: code || null,
       discount: discount || null,
       category: category || null,
       bank: bank || null,
@@ -56,11 +57,10 @@ export async function createCoupon(formData: FormData) {
       isFeatured,
       isActive: true,
       status: "PUBLISHED",
-      terms: termsRaw ? splitTerms(termsRaw) : null,
+      terms: termsRaw ? splitTerms(termsRaw) : Prisma.JsonNull,
     },
   });
 
-  // refresh pages
   revalidatePath("/admin/coupons");
   revalidatePath("/stores");
   revalidatePath(`/stores/${store.slug}`);

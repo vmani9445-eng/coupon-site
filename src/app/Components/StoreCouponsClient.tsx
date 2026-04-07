@@ -66,24 +66,30 @@ export default function StoreCouponsClient({ store }: Props) {
 
   useEffect(() => {
     document.body.style.overflow = selectedCoupon ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [selectedCoupon]);
 
-  const couponCount = store.coupons.filter((item) => item.type === "coupon").length;
-  const dealCount = store.coupons.filter((item) => item.type === "deal").length;
+  const couponCount = store.coupons.filter(
+    (item) => item.type === "coupon"
+  ).length;
+
+  const dealCount = store.coupons.filter(
+    (item) => item.type === "deal"
+  ).length;
 
   const bankOptions = Array.from(
-  new Set(
-    store.coupons
-      .map((item) => detectBankName(item.bankOffer))
-      .filter(
-        (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
-          item !== null
-      )
-  )
-);
+    new Set(
+      store.coupons
+        .map((item) => detectBankName(item.bankOffer))
+        .filter(
+          (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
+            item !== null
+        )
+    )
+  );
 
   const filteredCoupons = useMemo(() => {
     return store.coupons.filter((item) => {
@@ -178,8 +184,10 @@ export default function StoreCouponsClient({ store }: Props) {
 
   const formatDiscountDisplay = (discount: string) => {
     const clean = discount.trim();
+
     if (clean.toUpperCase().includes("OFF")) return clean;
     if (clean.toUpperCase().includes("DEAL")) return clean;
+
     return clean;
   };
 
@@ -353,7 +361,9 @@ export default function StoreCouponsClient({ store }: Props) {
                         )}
 
                         {coupon.best && (
-                          <span className="couponMiniBadge badgeBest">Best</span>
+                          <span className="couponMiniBadge badgeBest">
+                            Best
+                          </span>
                         )}
 
                         <span className="couponMiniBadge badgeCategory">
@@ -379,7 +389,9 @@ export default function StoreCouponsClient({ store }: Props) {
                         className="couponDetailsToggle"
                         onClick={() => toggleDetails(coupon.id)}
                       >
-                        {isDetailsOpen ? "Hide details & terms" : "View details & terms"}
+                        {isDetailsOpen
+                          ? "Hide details & terms"
+                          : "View details & terms"}
                       </button>
 
                       {isDetailsOpen && (
@@ -397,7 +409,9 @@ export default function StoreCouponsClient({ store }: Props) {
                             ) : (
                               <>
                                 <li>Valid on selected products only.</li>
-                                <li>Cannot be combined with some other offers.</li>
+                                <li>
+                                  Cannot be combined with some other offers.
+                                </li>
                                 <li>Discount may vary by cart value.</li>
                               </>
                             )}
@@ -412,7 +426,9 @@ export default function StoreCouponsClient({ store }: Props) {
                         className="showCouponBtn"
                         onClick={() => openCouponModal(coupon)}
                       >
-                        {coupon.type === "deal" ? "Activate Deal" : "Show Coupon"}
+                        {coupon.type === "deal"
+                          ? "Activate Deal"
+                          : "Show Coupon"}
                       </button>
 
                       <p className="couponActionHint">

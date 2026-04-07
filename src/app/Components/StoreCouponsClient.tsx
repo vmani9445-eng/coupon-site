@@ -78,8 +78,9 @@ export default function StoreCouponsClient({ store }: Props) {
   new Set(
     store.coupons
       .map((item) => detectBankName(item.bankOffer))
-      .filter((item): item is NonNullable<ReturnType<typeof detectBankName>> =>
-        item !== null
+      .filter(
+        (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
+          item !== null
       )
   )
 );

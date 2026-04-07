@@ -60,7 +60,7 @@ export default async function StorePage({ params }: StorePageProps) {
     discount: coupon.discount || "SAVE",
     category: coupon.category || "General",
     bankOffer: coupon.bank || undefined,
-    usersToday: coupon.users ?? 0,
+  usersToday: coupon.usesToday ?? 0,
     expiresText: coupon.expiresAt
       ? `Ends ${new Date(coupon.expiresAt).toLocaleDateString("en-IN", {
           day: "2-digit",

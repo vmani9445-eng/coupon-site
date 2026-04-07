@@ -79,9 +79,10 @@ export default function StoreCouponsClient({ store }: Props) {
       store.coupons
         .map((item) => detectBankName(item.bankOffer))
         .filter(
-  (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
-    item !== null
-)
+          (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
+            item !== null
+        )
+    )
   );
 
   const filteredCoupons = useMemo(() => {

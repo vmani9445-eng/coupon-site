@@ -18,14 +18,17 @@ export default function EditStoreModal({ store, onClose }: Props) {
   const [description, setDescription] = useState("");
   const [logo, setLogo] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     if (!store) return;
+
     setName(store.name || "");
     setWebsiteUrl(store.websiteUrl || "");
     setDescription(store.description || "");
     setLogo(store.logo || "");
     setIsFeatured(store.isFeatured);
+    setIsActive(store.isActive ?? true);
     setError("");
   }, [store]);
 
@@ -65,6 +68,7 @@ export default function EditStoreModal({ store, onClose }: Props) {
 
         <form action={handleSubmit} className="adminForm">
           <input type="hidden" name="id" value={store.id} />
+          <input type="hidden" name="currentLogo" value={store.logo || ""} />
 
           <div className="adminFormGrid">
             <div className="adminField">
@@ -104,15 +108,25 @@ export default function EditStoreModal({ store, onClose }: Props) {
               />
             </div>
 
-            <div className="adminField">
-              <label htmlFor="edit-logo">Logo URL</label>
+            <div className="adminField adminFieldFull">
+              <label htmlFor="edit-logoFile">Upload Logo</label>
+              <input
+                id="edit-logoFile"
+                name="logoFile"
+                type="file"
+                accept="image/*"
+              />
+            </div>
+
+            <div className="adminField adminFieldFull">
+              <label htmlFor="edit-logo">Logo URL or Local Path</label>
               <input
                 id="edit-logo"
                 name="logo"
                 type="text"
                 value={logo}
                 onChange={(e) => setLogo(e.target.value)}
-                placeholder="https://example.com/logo.png"
+                placeholder="/uploads/stores/flipkart.png or https://example.com/logo.png"
               />
             </div>
 
@@ -125,6 +139,18 @@ export default function EditStoreModal({ store, onClose }: Props) {
                   onChange={(e) => setIsFeatured(e.target.checked)}
                 />
                 <span>Featured Store</span>
+              </label>
+            </div>
+
+            <div className="adminField adminCheckboxField">
+              <label className="adminCheckboxRow">
+                <input
+                  name="isActive"
+                  type="checkbox"
+                  checked={isActive}
+                  onChange={(e) => setIsActive(e.target.checked)}
+                />
+                <span>Active Store</span>
               </label>
             </div>
           </div>

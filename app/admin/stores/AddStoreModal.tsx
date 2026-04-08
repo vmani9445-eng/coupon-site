@@ -50,7 +50,13 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
           <div className="adminFormGrid">
             <div className="adminField">
               <label htmlFor="name">Store Name</label>
-              <input id="name" name="name" type="text" placeholder="Amazon" required />
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Amazon"
+                required
+              />
             </div>
 
             <div className="adminField">
@@ -73,13 +79,23 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
               />
             </div>
 
-            <div className="adminField">
-              <label htmlFor="logo">Logo URL</label>
+            <div className="adminField adminFieldFull">
+              <label htmlFor="logoFile">Upload Logo</label>
+              <input
+                id="logoFile"
+                name="logoFile"
+                type="file"
+                accept="image/*"
+              />
+            </div>
+
+            <div className="adminField adminFieldFull">
+              <label htmlFor="logo">Logo URL or Local Path</label>
               <input
                 id="logo"
                 name="logo"
                 type="text"
-                placeholder="https://example.com/logo.png"
+                placeholder="/uploads/stores/amazon.png or https://example.com/logo.png"
               />
             </div>
 
@@ -87,6 +103,13 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
               <label className="adminCheckboxRow">
                 <input name="isFeatured" type="checkbox" />
                 <span>Featured Store</span>
+              </label>
+            </div>
+
+            <div className="adminField adminCheckboxField">
+              <label className="adminCheckboxRow">
+                <input name="isActive" type="checkbox" defaultChecked />
+                <span>Active Store</span>
               </label>
             </div>
           </div>

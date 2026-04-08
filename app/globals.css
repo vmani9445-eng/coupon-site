@@ -2694,3 +2694,101 @@ input {
   background: #fff;
   color: var(--admin-text);
 }
+.adminBannerForm {
+  width: 100%;
+}
+
+.adminFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.adminFormField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adminFormFieldFull {
+  grid-column: 1 / -1;
+}
+
+.adminFormField label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.adminFormField input,
+.adminFormField select,
+.adminFormField textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 14px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+}
+
+.adminFormField input:focus,
+.adminFormField select:focus,
+.adminFormField textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.adminFormCheckboxField {
+  justify-content: flex-end;
+}
+
+.adminFormCheckboxField input {
+  width: 18px;
+  height: 18px;
+  min-height: unset;
+  padding: 0;
+}
+
+.adminButtonSecondary {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.adminPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.adminEmptyState {
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.adminEmptyState h3 {
+  margin: 0 0 8px;
+}
+
+.adminEmptyState p {
+  margin: 0;
+  color: #6b7280;
+}
+
+@media (max-width: 860px) {
+  .adminFormGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .adminFormFieldFull {
+    grid-column: auto;
+  }
+}

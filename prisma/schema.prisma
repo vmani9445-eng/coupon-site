@@ -111,6 +111,82 @@ model OfferClick {
   @@index([storeSlug])
 }
 
+model PromoBanner {
+  id             String   @id @default(cuid())
+  title          String
+  subtitle       String?
+  imageUrl       String
+  mobileImageUrl String?
+  ctaText        String?
+  ctaUrl         String?
+  bannerType     String   // hero | horizontal | vertical | square
+  placement      String   // homepage_top | homepage_middle | sidebar | store_page | category_page
+  storeSlug      String?
+  category       String?
+  source         String?  // manual | affiliate
+  externalId     String?
+  priority       Int      @default(0)
+  isActive       Boolean  @default(true)
+  startsAt       DateTime?
+  endsAt         DateTime?
+  rawPayload     Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([placement])
+  @@index([category])
+  @@index([storeSlug])
+  @@index([isActive])
+  @@index([priority])
+  @@index([source])
+}
+
+model HomepageSectionControl {
+  id         String   @id @default(cuid())
+  sectionKey String   @unique // hero, great_offers, top_brands, categories, featured_coupons, promo_row
+  title      String
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model HomepageFeaturedOffer {
+  id            String   @id @default(cuid())
+  title         String
+  subtitle      String?
+  imageUrl      String?
+  storeName     String
+  storeSlug     String
+  priceText     String?
+  oldPriceText  String?
+  discountText  String?
+  bankOfferText String?
+  cashbackText  String?
+  validTillText String?
+  ctaText       String?  @default("View Deal")
+  ctaUrl        String?
+  category      String?
+  source        String?  // manual | affiliate
+  externalId    String?
+  priority      Int      @default(0)
+  isActive      Boolean  @default(true)
+  startsAt      DateTime?
+  endsAt        DateTime?
+  rawPayload    Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([storeSlug])
+  @@index([category])
+  @@index([isActive])
+  @@index([priority])
+  @@index([source])
+}
+
 enum CouponStatus {
   DRAFT
   PUBLISHED

@@ -18,14 +18,17 @@ type StoresClientProps = {
   categories: string[];
   stores: StoreWithStats[];
   topIndianStores: StoreWithStats[];
+  initialCategory?: string;
 };
 
 export default function StoresClient({
   categories,
   stores,
+  topIndianStores,
+  initialCategory,
 }: StoresClientProps) {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(initialCategory || "All");
 
   const filteredStores = useMemo(() => {
     return stores.filter((store) => {
@@ -40,7 +43,9 @@ export default function StoresClient({
     });
   }, [stores, search, activeCategory]);
 
-  const allCategories = ["All", ...categories.filter(Boolean)];
+  const allCategories = useMemo(() => {
+    return ["All", ...categories.filter((category) => category && category !== "All")];
+  }, [categories]);
 
   const getDisplayName = (name: string) => {
     return name.length > 16 ? `${name.slice(0, 16)}...` : name;
@@ -93,6 +98,33 @@ export default function StoresClient({
         </aside>
 
         <section className="storesDashboardContent">
+          {topIndianStores.length > 0 &&
+            activeCategory === "All" &&
+            search.trim() === "" && (
+              <div className="storesTopBrandsRow">
+                {topIndianStores.slice(0, 4).map((store) => (
+                  <Link
+                    key={store.slug}
+                    href={`/stores/${store.slug}`}
+                    className="storesTopBrandCard"
+                  >
+                    {store.logo ? (
+                      <img
+                        src={store.logo}
+                        alt={store.name}
+                        className="storesCompactLogoImage"
+                      />
+                    ) : (
+                      <div className="storesCompactLogo">
+                        {getLogoText(store.name)}
+                      </div>
+                    )}
+                    <div className="storesTopBrandName">{store.name}</div>
+                  </Link>
+                ))}
+              </div>
+            )}
+
           <div className="storesGridCompact">
             {filteredStores.map((store) => (
               <Link

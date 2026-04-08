@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import ImportOffersButton from "./ImportOffersButton";
 
@@ -12,21 +13,21 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="adminPage">
-      {/* HEADER */}
       <div className="adminPageHeader">
         <div>
           <h1>Admin Dashboard</h1>
-          <p>Manage stores, coupons, cashback offers, and submissions.</p>
+          <p>
+            Manage stores, coupons, cashback offers, submissions, homepage
+            banners, and featured offers.
+          </p>
         </div>
 
-        {/* 🔥 IMPORT BUTTONS */}
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <ImportOffersButton source="amazon" />
           <ImportOffersButton source="flipkart" />
         </div>
       </div>
 
-      {/* STATS */}
       <section className="adminStatsGrid">
         <div className="adminStatCard">
           <span>Total Stores</span>
@@ -49,22 +50,33 @@ export default async function AdminDashboardPage() {
         </div>
       </section>
 
-      {/* 🔥 QUICK ACTIONS (OPTIONAL BUT POWERFUL) */}
       <section style={{ marginTop: "30px" }}>
         <h3 style={{ marginBottom: "10px" }}>Quick Actions</h3>
 
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-          <a href="/admin/stores" className="adminButton">
+          <Link href="/admin/stores" className="adminButton">
             Manage Stores
-          </a>
+          </Link>
 
-          <a href="/admin/coupons" className="adminButton">
+          <Link href="/admin/coupons" className="adminButton">
             Manage Coupons
-          </a>
+          </Link>
 
-          <a href="/admin/cashback" className="adminButton">
+          <Link href="/admin/cashback" className="adminButton">
             Manage Cashback
-          </a>
+          </Link>
+
+          <Link href="/admin/home" className="adminButton">
+            Homepage Controls
+          </Link>
+
+          <Link href="/admin/banners" className="adminButton">
+            Manage Banners
+          </Link>
+
+          <Link href="/admin/featured-offers" className="adminButton">
+            Featured Offers
+          </Link>
         </div>
       </section>
     </div>

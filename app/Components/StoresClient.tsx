@@ -23,9 +23,11 @@ type StoresClientProps = {
 export default function StoresClient({
   categories,
   stores,
+  topIndianStores,
+  initialCategory,
 }: StoresClientProps) {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(initialCategory || "All");
 
   const filteredStores = useMemo(() => {
     return stores.filter((store) => {

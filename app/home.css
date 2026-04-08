@@ -1,0 +1,1335 @@
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-soft: #fafbfc;
+  --line: #e7eaf1;
+  --text: #171c2a;
+  --muted: #667085;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --radius-xl: 26px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --shadow: 0 10px 30px rgba(17, 24, 39, 0.05);
+  --container: 1240px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.page {
+  width: min(var(--container), calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 60px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(246, 247, 251, 0.9);
+  backdrop-filter: blur(12px);
+  padding: 10px 0 18px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primaryBtn,
+.ghostBtn,
+.lightBtn,
+.brandLink {
+  border: 0;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font: inherit;
+}
+
+.primaryBtn {
+  background: var(--primary);
+  color: #fff;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.primaryBtn:hover {
+  background: var(--primary-dark);
+}
+
+.ghostBtn {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.lightBtn {
+  background: #fff;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+}
+
+.stickySearchBar {
+  position: sticky;
+  top: 76px;
+  z-index: 40;
+  margin-bottom: 22px;
+}
+
+.stickySearchInner {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.stickySearchInner input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: var(--text);
+  padding: 4px 6px;
+}
+
+.heroWrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.95fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.heroSlider {
+  min-height: 360px;
+  padding: 28px;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero-violet {
+  background:
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.22), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #f3f1ff 100%);
+}
+
+.hero-blue {
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
+}
+
+.hero-peach {
+  background:
+    radial-gradient(circle at top right, rgba(251, 146, 60, 0.18), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #fff4eb 100%);
+}
+
+.heroSliderContent {
+  max-width: 680px;
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--line);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.heroSlider h1 {
+  margin: 18px 0 12px;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.heroSlider p {
+  margin: 0;
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.heroSliderActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.heroPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.heroPills span {
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.heroSliderDots {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  left: 28px;
+  bottom: 24px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 0;
+  background: #d5dbeb;
+  padding: 0;
+}
+
+.dot.active {
+  width: 28px;
+  background: var(--primary);
+}
+
+.heroSide {
+  display: grid;
+  gap: 18px;
+}
+
+.sideCard {
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.sideCard.dark {
+  background: linear-gradient(145deg, #151a27, #0f172a);
+  color: #fff;
+}
+
+.sideCard.light {
+  background: var(--surface);
+}
+
+.sideCard h3 {
+  margin: 14px 0 8px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.sideCard p {
+  margin: 0;
+  color: inherit;
+  opacity: 0.88;
+  line-height: 1.65;
+}
+
+.sideCard.dark p {
+  opacity: 0.78;
+}
+
+.smallChip {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sideCard.dark .lightBtn {
+  margin-top: 18px;
+}
+
+.brandsSection,
+.quickSection,
+.footerBanner {
+  padding: 24px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.sectionHead h2,
+.quickSection h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.sectionSub {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.brandGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.brandCard {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brandCard:hover,
+.quickCard:hover,
+.couponCard:hover {
+  transform: translateY(-2px);
+}
+
+.brandLogo,
+.storeLogo {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #eef2ff;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brandMeta h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.brandMeta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.brandTopRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.softMiniTag {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.brandLink {
+  margin-top: 10px;
+  background: transparent;
+  color: var(--primary);
+  padding: 0;
+  font-weight: 700;
+}
+
+.quickSection {
+  margin-top: 24px;
+}
+
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.quickCard {
+  text-align: center;
+  padding: 18px 14px;
+  border-radius: 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+}
+
+.quickIcon {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.quickName {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.quickSub {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.contentSection {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.sidebar {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.sideBlock {
+  padding: 22px;
+}
+
+.sideBlock h3 {
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.listItem:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.listItem.withLogo {
+  justify-content: flex-start;
+}
+
+.listTitle {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.listSub {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.mainCoupons {
+  min-width: 0;
+}
+
+.couponList {
+  display: grid;
+  gap: 16px;
+}
+
+.couponCard {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) 220px;
+  gap: 18px;
+  padding: 18px;
+  align-items: center;
+}
+
+.discountBox {
+  border-radius: 18px;
+  padding: 18px 14px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.discountText {
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.discountSub {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.couponInfo h3 {
+  margin: 8px 0 8px;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.couponInfo p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.storeTag {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.okTag,
+.softTag {
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.okTag {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.softTag {
+  background: #f4f5f7;
+  color: var(--muted);
+}
+
+.couponAction {
+  display: grid;
+  gap: 10px;
+}
+
+.codeBox {
+  border: 1px dashed #cfd5e3;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  background: #fbfcff;
+}
+
+.codeLabel {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.codeValue {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.fullBtn {
+  width: 100%;
+}
+
+.usageRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.promoRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.promoCard {
+  padding: 24px;
+}
+
+.promoKicker {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.promoCard h3 {
+  margin: 10px 0 8px;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.promoCard p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.yellow {
+  background: #fff7ed;
+}
+
+.blue {
+  background: #eff6ff;
+}
+
+.purple {
+  background: #f5f3ff;
+}
+
+.footerBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.footerBanner h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.footerBanner p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.7;
+}
+
+@media (max-width: 1100px) {
+  .brandGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .quickGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .contentSection {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .couponCard {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+
+  .couponAction {
+    grid-column: 1 / -1;
+  }
+
+  .promoRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    width: min(100% - 20px, var(--container));
+    padding-top: 16px;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 18px;
+    overflow-x: auto;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stickySearchBar {
+    top: 116px;
+  }
+
+  .stickySearchInner {
+    flex-direction: column;
+  }
+
+  .heroWrap {
+    grid-template-columns: 1fr;
+  }
+
+  .heroSlider,
+  .sideCard {
+    border-radius: 22px;
+  }
+
+  .heroSlider {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .heroSlider h1 {
+    font-size: 32px;
+  }
+
+  .heroSliderDots {
+    position: static;
+    margin-top: 18px;
+  }
+
+  .brandGrid,
+  .quickGrid,
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .couponCard {
+    grid-template-columns: 1fr;
+  }
+
+  .discountBox {
+    max-width: 120px;
+  }
+
+  .sectionHead,
+  .footerBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.brandLogoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quickCard {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.quickCard.active {
+  outline: 2px solid rgba(79, 70, 229, 0.18);
+  background: #eef2ff;
+}
+
+.listButton {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.emptyState {
+  padding: 28px;
+}
+
+.emptyState h3 {
+  margin: 0 0 8px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.brandCard,
+.listItem.withLogo,
+.storeTag {
+  text-decoration: none;
+  color: inherit;
+}
+.offerBannerStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.offerBannerCard {
+  border-radius: 24px;
+  padding: 22px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.offerBannerCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(17, 24, 39, 0.08);
+}
+
+.offerBanner-violet {
+  background: linear-gradient(135deg, #f4f1ff 0%, #ebe8ff 100%);
+}
+
+.offerBanner-orange {
+  background: linear-gradient(135deg, #fff4e8 0%, #ffeddc 100%);
+}
+
+.offerBanner-green {
+  background: linear-gradient(135deg, #edfdf3 0%, #e4f9ed 100%);
+}
+
+.offerBannerKicker {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.offerBannerContent h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.offerBannerContent p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.offerBannerLink {
+  display: inline-flex;
+  margin-top: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.greatOffersSection {
+  padding: 24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.greatOffersSlider {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.greatOfferCard {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.greatOfferCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(17, 24, 39, 0.08);
+}
+
+.greatOfferTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.greatOfferBadge {
+  background: #fff4e8;
+  color: #c96a1a;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.greatOfferStore {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.greatOfferImageBox {
+  height: 120px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f7f8fc, #eef2ff);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.greatOfferCard h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.greatOfferPriceRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.greatOfferPrice {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.greatOfferOldPrice {
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.greatOfferDiscount {
+  font-size: 13px;
+  font-weight: 700;
+  color: #15803d;
+  background: #ecfdf3;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.greatOfferPills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cashbackPill {
+  display: inline-flex;
+  align-self: flex-start;
+  background: #eefcf4;
+  color: #15803d;
+  padding: 8px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bankPill {
+  display: inline-flex;
+  align-self: flex-start;
+  background: #eef3ff;
+  color: #3557d6;
+  padding: 8px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.greatOfferFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.validTillText {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .offerBannerStrip,
+  .greatOffersSlider {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .offerBannerStrip,
+  .greatOffersSlider {
+    grid-template-columns: 1fr;
+  }
+
+  .offerBannerContent h3,
+  .greatOfferCard h3 {
+    font-size: 20px;
+  }
+
+  .greatOfferPrice {
+    font-size: 22px;
+  }
+
+  .greatOfferFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.heroGridFull {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.heroLeft {
+  display: flex;
+  min-width: 0;
+}
+
+.heroRight {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  min-width: 0;
+}
+
+.bannerHeroLarge {
+  display: block;
+  width: 100%;
+  min-height: 360px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.bannerHeroSmall {
+  display: block;
+  width: 100%;
+  min-height: 190px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.middleBannerSection {
+  margin-top: 22px;
+}
+
+.middleStripBanner {
+  display: block;
+  width: 100%;
+  min-height: 130px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.promoBoxBanner {
+  display: block;
+  width: 100%;
+  min-height: 220px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.dbBannerBlock {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.dbBannerImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.dbBannerOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.06) 0%,
+    rgba(15, 23, 42, 0.48) 100%
+  );
+}
+
+.dbBannerContent {
+  width: 100%;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dbBannerTitle {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dbBannerSubtitle {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dbBannerButton {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 991px) {
+  .heroGridFull {
+    grid-template-columns: 1fr;
+  }
+
+  .heroRight {
+    grid-template-rows: auto;
+  }
+
+  .bannerHeroLarge {
+    min-height: 280px;
+  }
+
+  .bannerHeroSmall {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 767px) {
+  .middleStripBanner {
+    min-height: 90px;
+  }
+
+  .promoBoxBanner {
+    min-height: 180px;
+  }
+
+  .dbBannerTitle {
+    font-size: 18px;
+  }
+
+  .dbBannerSubtitle {
+    font-size: 13px;
+  }
+}
+.dbBannerBlock {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  border-radius: inherit;
+  background: #f3f4f6;
+}
+
+.dbBannerImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.dbBannerOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.06) 0%,
+    rgba(15, 23, 42, 0.48) 100%
+  );
+}
+
+.dbBannerContent {
+  width: 100%;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dbBannerTitle {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dbBannerSubtitle {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dbBannerButton {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heroMainBanner {
+  min-height: 100%;
+  border-radius: 8px;
+}
+
+.heroMiniBanner {
+  min-height: 190px;
+   border-radius: 8px;
+}
+
+.middleStripBanner {
+  min-height: 130px;
+   border-radius: 8px;
+}
+
+.promoBoxBanner {
+  min-height: 220px;
+   border-radius: 8px;
+}
+.heroSliderWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.heroSliderDotsOverlay {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+}

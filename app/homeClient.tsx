@@ -211,23 +211,19 @@ function BannerBlock({
   if (!banner) return null;
 
   const href = banner.ctaUrl?.trim() || "#";
+  const buttonText = banner.ctaText?.trim() || "View Deals";
+  const imageSrc = banner.mobileImageUrl?.trim() || banner.imageUrl;
 
   return (
     <Link href={href} className={`dbBannerBlock ${className}`.trim()}>
-      <img
-        src={banner.imageUrl}
-        alt={banner.title}
-        className="dbBannerImage"
-      />
+      <img src={imageSrc} alt={banner.title} className="dbBannerImage" />
       <div className="dbBannerOverlay">
         <div className="dbBannerContent">
           <span className="dbBannerTitle">{banner.title}</span>
           {banner.subtitle ? (
             <span className="dbBannerSubtitle">{banner.subtitle}</span>
           ) : null}
-          {banner.ctaText ? (
-            <span className="dbBannerButton">{banner.ctaText}</span>
-          ) : null}
+          <span className="dbBannerButton">{buttonText}</span>
         </div>
       </div>
     </Link>
@@ -287,12 +283,14 @@ export default function Home({
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    if (heroTopBanners.length > 0) return;
+
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % sliderItems.length);
     }, 3500);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [heroTopBanners.length]);
 
   const currentSlide = sliderItems[activeSlide];
 

@@ -1,11 +1,10 @@
-
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
+import { getSession } from "@/lib/session";
 
 export async function POST(req: Request) {
-  const session: any = await getServerSession();
+  const session = await getSession();
 
-  if (!session?.user?.id) {
+  if (!session?.userId) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -13,7 +12,7 @@ export async function POST(req: Request) {
 
   const ticket = await prisma.supportTicket.create({
     data: {
-      userId: session.user.id,
+      userId: session.userId,
       subject: body.subject,
       message: body.message,
     },
@@ -23,14 +22,14 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const session: any = await getServerSession();
+  const session = await getSession();
 
-  if (!session?.user?.id) {
+  if (!session?.userId) {
     return Response.json([], { status: 200 });
   }
 
   const tickets = await prisma.supportTicket.findMany({
-    where: { userId: session.user.id },
+    where: { userId: session.userId },
     orderBy: { createdAt: "desc" },
   });
 

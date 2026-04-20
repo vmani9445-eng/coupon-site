@@ -21,6 +21,14 @@ type StoresClientProps = {
   initialCategory?: string;
 };
 
+function splitCategories(value?: string) {
+  if (!value) return [];
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export default function StoresClient({
   categories,
   stores,
@@ -30,22 +38,36 @@ export default function StoresClient({
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState(initialCategory || "All");
 
+  const cleanedCategories = useMemo(() => {
+    const fromProps = categories.flatMap((category) => splitCategories(category));
+    const fromStores = stores.flatMap((store) => splitCategories(store.category));
+
+    return Array.from(
+      new Set([...fromProps, ...fromStores].filter((category) => category !== "All"))
+    ).sort((a, b) => a.localeCompare(b));
+  }, [categories, stores]);
+
+  const allCategories = useMemo(() => {
+    return ["All", ...cleanedCategories];
+  }, [cleanedCategories]);
+
   const filteredStores = useMemo(() => {
+    const searchValue = search.trim().toLowerCase();
+
     return stores.filter((store) => {
       const matchSearch =
-        store.name.toLowerCase().includes(search.toLowerCase()) ||
-        store.slug.toLowerCase().includes(search.toLowerCase());
+        searchValue === "" ||
+        store.name.toLowerCase().includes(searchValue) ||
+        store.slug.toLowerCase().includes(searchValue);
+
+      const storeCategories = splitCategories(store.category);
 
       const matchCategory =
-        activeCategory === "All" || store.category === activeCategory;
+        activeCategory === "All" || storeCategories.includes(activeCategory);
 
       return matchSearch && matchCategory;
     });
   }, [stores, search, activeCategory]);
-
-  const allCategories = useMemo(() => {
-    return ["All", ...categories.filter((category) => category && category !== "All")];
-  }, [categories]);
 
   const getDisplayName = (name: string) => {
     return name.length > 16 ? `${name.slice(0, 16)}...` : name;
@@ -68,33 +90,35 @@ export default function StoresClient({
     <div className="storesDashboardPage">
       <div className="storesDashboardLayout">
         <aside className="storesSidebar">
-          <div className="storesSidebarTitle">Stores</div>
+          <div className="storesSidebarSticky">
+            <div className="storesSidebarTitle">Stores</div>
 
-          <div className="storesSidebarSearchWrap">
-            <input
-              type="text"
-              className="storesSidebarSearch"
-              placeholder="Search stores..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="storesSidebarSearchWrap">
+              <input
+                type="text"
+                className="storesSidebarSearch"
+                placeholder="Search stores..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <nav className="storesSidebarNav">
+              {allCategories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`storesSidebarNavItem ${
+                    activeCategory === category ? "active" : ""
+                  }`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  <span className="storesSidebarDot" />
+                  <span>{category}</span>
+                </button>
+              ))}
+            </nav>
           </div>
-
-          <nav className="storesSidebarNav">
-            {allCategories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={`storesSidebarNavItem ${
-                  activeCategory === category ? "active" : ""
-                }`}
-                onClick={() => setActiveCategory(category)}
-              >
-                <span className="storesSidebarDot" />
-                <span>{category}</span>
-              </button>
-            ))}
-          </nav>
         </aside>
 
         <section className="storesDashboardContent">
@@ -124,6 +148,10 @@ export default function StoresClient({
                 ))}
               </div>
             )}
+
+          <div className="storesResultsCount">
+            Showing {filteredStores.length} of {stores.length} stores
+          </div>
 
           <div className="storesGridCompact">
             {filteredStores.map((store) => (

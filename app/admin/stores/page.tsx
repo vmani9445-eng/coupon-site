@@ -1,22 +1,22 @@
 import { prisma } from "@/lib/prisma";
-import StoresPageClient from "./StoresPageClient";
+import StoresPageClient, { StoreRow } from "./StoresPageClient";
 
 export default async function AdminStoresPage() {
   const stores = await prisma.store.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       _count: {
         select: {
           coupons: true,
-          cashback: true,
+          cashbackOffers: true,
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
   });
 
-  const formattedStores = stores.map((store) => ({
+  const formattedStores: StoreRow[] = stores.map((store) => ({
     id: store.id,
     name: store.name,
     slug: store.slug,
@@ -24,8 +24,11 @@ export default async function AdminStoresPage() {
     websiteUrl: store.websiteUrl,
     logo: store.logo,
     couponsCount: store._count.coupons,
-    cashbackCount: store._count.cashback,
+    cashbackCount: store._count.cashbackOffers,
     isFeatured: store.isFeatured,
+    isActive: store.isActive,
+    createdAt: store.createdAt.toISOString(),
+    cashbackPercentToUser: (store as any).cashbackPercentToUser ?? 70,
   }));
 
   return <StoresPageClient stores={formattedStores} />;

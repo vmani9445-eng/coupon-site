@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import "../storepage.css";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import CouponModal from "./couponmodal";
 
 type Coupon = {
   id: string;
+  storeId?: string;
   title: string;
   description: string;
   discount: string;
@@ -19,12 +22,19 @@ type Coupon = {
   type: "coupon" | "deal";
   terms?: string[];
   userType?: "all" | "first_time" | "existing";
+  extraCashback?: string;
+
+  networkCashback?: number;
+  userCashback?: number;
+  adminMargin?: number;
+  cashbackLabel?: string;
 };
 
 type Store = {
   slug: string;
   name: string;
   description: string;
+  logo?: string | null;
   logoText: string;
   offersCount: number;
   tags: string[];
@@ -34,6 +44,7 @@ type Store = {
 
 type Props = {
   store: Store;
+  isLoggedIn?: boolean;
 };
 
 function detectBankName(bankOffer?: string) {
@@ -52,65 +63,224 @@ function detectBankName(bankOffer?: string) {
   return "Other";
 }
 
-export default function StoreCouponsClient({ store }: Props) {
+function splitCommaValues(values: string[]) {
+  return Array.from(
+    new Set(
+      values
+        .flatMap((value) =>
+          value
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean)
+        )
+        .filter(Boolean)
+    )
+  );
+}
+
+function splitSingleValue(value?: string) {
+  if (!value) return [];
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function detectAudienceLabel(coupon: Coupon) {
+  if (coupon.userType === "first_time") return "New User Only";
+  if (coupon.userType === "existing") return "Existing Users";
+
+  const text =
+    `${coupon.title} ${coupon.description} ${coupon.bankOffer || ""}`.toLowerCase();
+
+  if (
+    text.includes("first order") ||
+    text.includes("new user") ||
+    text.includes("new users") ||
+    text.includes("first-time") ||
+    text.includes("first time") ||
+    text.includes("signup") ||
+    text.includes("sign up")
+  ) {
+    return "New User Only";
+  }
+
+  if (
+    text.includes("existing users") ||
+    text.includes("returning users") ||
+    text.includes("loyal users")
+  ) {
+    return "Existing Users";
+  }
+
+  return null;
+}
+
+function formatDiscountDisplay(
+  discount: string,
+  title?: string,
+  description?: string
+) {
+  const extractBestOffer = (text?: string) => {
+    if (!text) return null;
+
+    const upper = text.toUpperCase().trim();
+    if (!upper) return null;
+
+    const upToMatches = Array.from(
+      upper.matchAll(/UP\s*TO\s*(\d+)\s*%/g)
+    ).map((match) => Number(match[1]));
+
+    if (upToMatches.length > 0) {
+      return `UP TO ${Math.max(...upToMatches)}%`;
+    }
+
+    const percentMatches = Array.from(upper.matchAll(/(\d+)\s*%/g)).map(
+      (match) => Number(match[1])
+    );
+
+    if (percentMatches.length > 0) {
+      return `${Math.max(...percentMatches)}% OFF`;
+    }
+
+    const amountMatches = Array.from(upper.matchAll(/₹\s*([\d,]+)/g)).map(
+      (match) => match[1]
+    );
+
+    if (amountMatches.length > 0) {
+      return `₹${amountMatches[0]} OFF`;
+    }
+
+    if (/BUY\s*\d+/i.test(upper)) return upper;
+
+    return null;
+  };
+
+  const discountValue = (discount || "").trim().toUpperCase();
+
+  const genericOnlyValues = new Set([
+    "",
+    "SAVE",
+    "SALE",
+    "DEAL",
+    "OFFER",
+    "DISCOUNT",
+    "BEST DEAL",
+  ]);
+
+  const fromDiscount = extractBestOffer(discount);
+  if (fromDiscount) return fromDiscount;
+
+  if (!genericOnlyValues.has(discountValue) && discountValue) {
+    return discountValue;
+  }
+
+  const fromTitle = extractBestOffer(title);
+  if (fromTitle) return fromTitle;
+
+  const fromDescription = extractBestOffer(description);
+  if (fromDescription) return fromDescription;
+
+  return "BEST DEAL";
+}
+
+function getCashbackText(coupon: Coupon) {
+  if (coupon.cashbackLabel?.trim()) {
+    return coupon.cashbackLabel.trim();
+  }
+
+  if (typeof coupon.userCashback === "number" && coupon.userCashback > 0) {
+    return `Up to ${coupon.userCashback}% cashback`;
+  }
+
+  if (coupon.extraCashback?.trim()) {
+    return coupon.extraCashback.trim();
+  }
+
+  return null;
+}
+
+export default function StoreCouponsClient({
+  store,
+  isLoggedIn,
+}: Props) {
   const [activeTab, setActiveTab] = useState<"all" | "coupon" | "deal">("all");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBanks, setSelectedBanks] = useState<string[]>([]);
-  const [selectedUserType, setSelectedUserType] = useState<
-    "all" | "first_time" | "existing"
-  >("all");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(null);
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
   const [copied, setCopied] = useState(false);
+  const lastOpenedCouponIdRef = useRef<string | null>(null);
+
+  const [search, setSearch] = useState("");
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = selectedCoupon ? "hidden" : "";
+    document.body.style.overflow =
+      selectedCoupon || mobileFiltersOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
-  }, [selectedCoupon]);
+  }, [selectedCoupon, mobileFiltersOpen]);
 
-  const couponCount = store.coupons.filter((item) => item.type === "coupon").length;
-  const dealCount = store.coupons.filter((item) => item.type === "deal").length;
+  const couponCount = store.coupons.filter((c) => c.type === "coupon").length;
+  const dealCount = store.coupons.filter((c) => c.type === "deal").length;
 
-  const bankOptions = Array.from(
-    new Set(
-      store.coupons
-        .map((item) => detectBankName(item.bankOffer))
-        .filter(
-          (item): item is NonNullable<ReturnType<typeof detectBankName>> =>
-            item !== null
-        )
-    )
-  );
+  const bankOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        store.coupons
+          .map((c) => detectBankName(c.bankOffer))
+          .filter((b): b is string => Boolean(b))
+      )
+    ).sort((a, b) => a.localeCompare(b));
+  }, [store.coupons]);
+
+  const categoryOptions = useMemo(() => {
+    const fromStoreCategories = splitCommaValues(store.categories || []);
+    const fromCouponCategories = splitCommaValues(
+      store.coupons.map((c) => c.category).filter(Boolean)
+    );
+
+    return Array.from(
+      new Set([...fromStoreCategories, ...fromCouponCategories])
+    ).sort((a, b) => a.localeCompare(b));
+  }, [store.categories, store.coupons]);
 
   const filteredCoupons = useMemo(() => {
-    return store.coupons.filter((item) => {
-      const matchTab = activeTab === "all" || item.type === activeTab;
+    return store.coupons.filter((c) => {
+      const matchTab = activeTab === "all" || c.type === activeTab;
 
+      const couponCategories = splitSingleValue(c.category);
       const matchCategory =
         selectedCategories.length === 0 ||
-        selectedCategories.includes(item.category);
+        couponCategories.some((cat) => selectedCategories.includes(cat));
 
-      const bankName = detectBankName(item.bankOffer);
+      const bankName = detectBankName(c.bankOffer);
       const matchBank =
         selectedBanks.length === 0 ||
         (bankName ? selectedBanks.includes(bankName) : false);
 
-      const matchUserType =
-        selectedUserType === "all" ||
-        item.userType === selectedUserType ||
-        item.userType === undefined;
+      const matchVerified = !verifiedOnly || Boolean(c.verified);
 
-      const matchVerified = !verifiedOnly || Boolean(item.verified);
+      const q = search.trim().toLowerCase();
+      const matchSearch =
+        !q ||
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.discount.toLowerCase().includes(q) ||
+        c.category.toLowerCase().includes(q) ||
+        (c.bankOffer || "").toLowerCase().includes(q) ||
+        (c.cashbackLabel || "").toLowerCase().includes(q);
 
       return (
         matchTab &&
         matchCategory &&
         matchBank &&
-        matchUserType &&
-        matchVerified
+        matchVerified &&
+        matchSearch
       );
     });
   }, [
@@ -118,30 +288,25 @@ export default function StoreCouponsClient({ store }: Props) {
     activeTab,
     selectedCategories,
     selectedBanks,
-    selectedUserType,
     verifiedOnly,
+    search,
   ]);
 
-  const toggleCategory = (category: string) => {
+  const toggleCategory = (cat: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((item) => item !== category)
-        : [...prev, category]
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
   };
 
   const toggleBank = (bank: string) => {
     setSelectedBanks((prev) =>
-      prev.includes(bank)
-        ? prev.filter((item) => item !== bank)
-        : [...prev, bank]
+      prev.includes(bank) ? prev.filter((b) => b !== bank) : [...prev, bank]
     );
   };
 
   const clearFilters = () => {
     setSelectedCategories([]);
     setSelectedBanks([]);
-    setSelectedUserType("all");
     setVerifiedOnly(false);
   };
 
@@ -157,6 +322,7 @@ export default function StoreCouponsClient({ store }: Props) {
   const closeCouponModal = () => {
     setSelectedCoupon(null);
     setCopied(false);
+    lastOpenedCouponIdRef.current = null;
   };
 
   const copyCode = async () => {
@@ -165,44 +331,70 @@ export default function StoreCouponsClient({ store }: Props) {
     try {
       await navigator.clipboard.writeText(selectedCoupon.couponCode);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
+      setTimeout(() => setCopied(false), 1500);
     } catch {
       setCopied(false);
     }
   };
 
-  const continueToStore = () => {
-    if (!selectedCoupon?.affiliateUrl) return;
-    window.location.href = selectedCoupon.affiliateUrl;
+  const openActivationPage = (coupon: Coupon) => {
+    const outUrl = `/out/${coupon.id}`;
+    window.open(outUrl, "_blank");
   };
 
-  const formatDiscountDisplay = (discount: string) => {
-    const clean = discount.trim();
-    if (clean.toUpperCase().includes("OFF")) return clean;
-    if (clean.toUpperCase().includes("DEAL")) return clean;
-    return clean;
+  const openCouponFlow = (coupon: Coupon) => {
+    openCouponModal(coupon);
+
+    if (lastOpenedCouponIdRef.current !== coupon.id) {
+      openActivationPage(coupon);
+      lastOpenedCouponIdRef.current = coupon.id;
+    }
   };
+
+  const continueToStore = async () => {
+    if (!selectedCoupon) return;
+    openActivationPage(selectedCoupon);
+  };
+
+  const getPrimaryCategory = (category: string) => {
+    const categories = splitSingleValue(category);
+    return categories[0] || "General";
+  };
+
+  const activeFilterCount =
+    selectedCategories.length +
+    selectedBanks.length +
+    (verifiedOnly ? 1 : 0);
 
   return (
     <>
       <div className="storePagePremium">
         <section className="storeHeroPremium">
           <div className="storeHeroLogoPanel">
-            <div className="storeHeroLogoBox">{store.logoText}</div>
+            <div className="storeHeroLogoBox">
+              {store.logo ? (
+                <img src={store.logo} alt={store.name} />
+              ) : (
+                <span>{store.logoText}</span>
+              )}
+            </div>
           </div>
 
           <div className="storeHeroContent">
-            <p className="storeBreadcrumb">Home / {store.name}</p>
-            <h1 className="storeTitle">{store.name} Coupons & Deals</h1>
-            <p className="storeSubtitle">{store.description}</p>
+            <h1>{store.name} Coupons & Deals</h1>
+            <p>{store.description}</p>
 
-            <div className="storeTagList">
+            <div className="storeTagList storeTagListDesktop">
               {store.tags.map((tag) => (
-                <span key={tag} className="storeTag">
-                  {tag}
-                </span>
+                <span key={`desktop-${tag}`}>{tag}</span>
               ))}
             </div>
+          </div>
+
+          <div className="storeTagList storeTagListMobile">
+            {store.tags.map((tag) => (
+              <span key={`mobile-${tag}`}>{tag}</span>
+            ))}
           </div>
         </section>
 
@@ -212,7 +404,7 @@ export default function StoreCouponsClient({ store }: Props) {
             className={`storeTab ${activeTab === "all" ? "active" : ""}`}
             onClick={() => setActiveTab("all")}
           >
-            All ({store.coupons.length})
+            All ({store.offersCount})
           </button>
 
           <button
@@ -232,6 +424,30 @@ export default function StoreCouponsClient({ store }: Props) {
           </button>
         </section>
 
+        <div className="mobileStickyTools">
+          <div className="mobileStickyToolsInner">
+            <button
+              type="button"
+              className="mobileFilterBtn"
+              onClick={() => setMobileFiltersOpen(true)}
+            >
+              <SlidersHorizontal size={18} />
+              <span>Filters</span>
+              {activeFilterCount > 0 && <strong>{activeFilterCount}</strong>}
+            </button>
+
+            <div className="mobileSearchBar">
+              <Search size={17} />
+              <input
+                type="text"
+                placeholder="Search deals..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
         <section className="storeLayoutPremium">
           <aside className="filtersCardPremium">
             <div className="filtersTop">
@@ -245,21 +461,23 @@ export default function StoreCouponsClient({ store }: Props) {
               </button>
             </div>
 
-            <div className="filtersSection">
-              <h4>Categories</h4>
-              <div className="filtersList">
-                {store.categories.map((category) => (
-                  <label key={category} className="filterRow">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => toggleCategory(category)}
-                    />
-                    <span>{category}</span>
-                  </label>
-                ))}
+            {categoryOptions.length > 0 && (
+              <div className="filtersSection">
+                <h4>Categories</h4>
+                <div className="filtersList">
+                  {categoryOptions.map((category) => (
+                    <label key={category} className="filterRow">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => toggleCategory(category)}
+                      />
+                      <span>{category}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {bankOptions.length > 0 && (
               <div className="filtersSection">
@@ -278,41 +496,6 @@ export default function StoreCouponsClient({ store }: Props) {
                 </div>
               </div>
             )}
-
-            <div className="filtersSection">
-              <h4>User Type</h4>
-              <div className="filtersList">
-                <label className="filterRow">
-                  <input
-                    type="radio"
-                    name="userType"
-                    checked={selectedUserType === "all"}
-                    onChange={() => setSelectedUserType("all")}
-                  />
-                  <span>All users</span>
-                </label>
-
-                <label className="filterRow">
-                  <input
-                    type="radio"
-                    name="userType"
-                    checked={selectedUserType === "first_time"}
-                    onChange={() => setSelectedUserType("first_time")}
-                  />
-                  <span>First-time users</span>
-                </label>
-
-                <label className="filterRow">
-                  <input
-                    type="radio"
-                    name="userType"
-                    checked={selectedUserType === "existing"}
-                    onChange={() => setSelectedUserType("existing")}
-                  />
-                  <span>Existing users</span>
-                </label>
-              </div>
-            </div>
 
             <div className="filtersSection filtersSectionLast">
               <h4>Other</h4>
@@ -335,12 +518,20 @@ export default function StoreCouponsClient({ store }: Props) {
             ) : (
               filteredCoupons.map((coupon) => {
                 const isDetailsOpen = openDetailsId === coupon.id;
+                const audienceLabel = detectAudienceLabel(coupon);
+                const cashbackText = getCashbackText(coupon);
 
                 return (
                   <article key={coupon.id} className="couponShowcaseCard">
                     <div className="couponShowcaseLeft">
                       <div className="couponDiscountTile">
-                        <span>{formatDiscountDisplay(coupon.discount)}</span>
+                        <span>
+                          {formatDiscountDisplay(
+                            coupon.discount,
+                            coupon.title,
+                            coupon.description
+                          )}
+                        </span>
                       </div>
                     </div>
 
@@ -353,16 +544,30 @@ export default function StoreCouponsClient({ store }: Props) {
                         )}
 
                         {coupon.best && (
-                          <span className="couponMiniBadge badgeBest">Best</span>
+                          <span className="couponMiniBadge badgeBest">
+                            Best
+                          </span>
+                        )}
+
+                        {audienceLabel && (
+                          <span className="couponMiniBadge badgeAudience">
+                            {audienceLabel}
+                          </span>
                         )}
 
                         <span className="couponMiniBadge badgeCategory">
-                          {coupon.category}
+                          {getPrimaryCategory(coupon.category)}
                         </span>
                       </div>
 
                       <h2 className="couponHeadline">{coupon.title}</h2>
                       <p className="couponDesc">{coupon.description}</p>
+
+                      {cashbackText && (
+                        <div className="extraCashbackBadge">
+                          💰 {cashbackText}
+                        </div>
+                      )}
 
                       {coupon.bankOffer && (
                         <p className="couponBankLine">{coupon.bankOffer}</p>
@@ -379,7 +584,9 @@ export default function StoreCouponsClient({ store }: Props) {
                         className="couponDetailsToggle"
                         onClick={() => toggleDetails(coupon.id)}
                       >
-                        {isDetailsOpen ? "Hide details & terms" : "View details & terms"}
+                        {isDetailsOpen
+                          ? "Hide details & terms"
+                          : "View details & terms"}
                       </button>
 
                       {isDetailsOpen && (
@@ -410,7 +617,7 @@ export default function StoreCouponsClient({ store }: Props) {
                       <button
                         type="button"
                         className="showCouponBtn"
-                        onClick={() => openCouponModal(coupon)}
+                        onClick={() => openCouponFlow(coupon)}
                       >
                         {coupon.type === "deal" ? "Activate Deal" : "Show Coupon"}
                       </button>
@@ -429,12 +636,107 @@ export default function StoreCouponsClient({ store }: Props) {
         </section>
       </div>
 
+      {mobileFiltersOpen && (
+        <div
+          className="mobileFiltersOverlay"
+          onClick={() => setMobileFiltersOpen(false)}
+        >
+          <div
+            className="mobileFiltersSheet"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mobileFiltersHeader">
+              <h3>Filters</h3>
+              <button
+                type="button"
+                className="mobileFiltersClose"
+                onClick={() => setMobileFiltersOpen(false)}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {categoryOptions.length > 0 && (
+              <div className="mobileFiltersSection">
+                <div className="mobileFiltersTitleRow">
+                  <h4>Categories</h4>
+                </div>
+                <div className="mobileChoiceList">
+                  {categoryOptions.map((category) => (
+                    <label key={category} className="mobileChoiceRow">
+                      <span>{category}</span>
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => toggleCategory(category)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {bankOptions.length > 0 && (
+              <div className="mobileFiltersSection">
+                <div className="mobileFiltersTitleRow">
+                  <h4>Banks</h4>
+                </div>
+                <div className="mobileChoiceList">
+                  {bankOptions.map((bank) => (
+                    <label key={bank} className="mobileChoiceRow">
+                      <span>{bank}</span>
+                      <input
+                        type="checkbox"
+                        checked={selectedBanks.includes(bank)}
+                        onChange={() => toggleBank(bank)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mobileFiltersSection">
+              <div className="mobileChoiceList">
+                <label className="mobileChoiceRow">
+                  <span>Verified only</span>
+                  <input
+                    type="checkbox"
+                    checked={verifiedOnly}
+                    onChange={() => setVerifiedOnly((prev) => !prev)}
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="mobileFiltersActions">
+              <button
+                type="button"
+                className="mobileClearBtn"
+                onClick={clearFilters}
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                className="mobileApplyBtn"
+                onClick={() => setMobileFiltersOpen(false)}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <CouponModal
         isOpen={Boolean(selectedCoupon)}
         coupon={selectedCoupon}
         storeName={store.name}
         storeLogoText={store.logoText}
+        storeLogo={store.logo}
         copied={copied}
+        isLoggedIn={isLoggedIn}
         onClose={closeCouponModal}
         onCopy={copyCode}
         onContinue={continueToStore}

@@ -1,0 +1,369 @@
+/* BASE */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* SCROLL EFFECT */
+.navbar.scrolled {
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* INNER */
+.navInner {
+  max-width: 1240px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* LOGO */
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  text-decoration: none;
+  color: #111;
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  gap: 24px;
+}
+
+.menu a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #444;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+/* UNDERLINE ANIMATION */
+.menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: #4f46e5;
+  transition: 0.3s;
+}
+
+.menu a:hover::after,
+.menu a.active::after {
+  width: 100%;
+}
+
+/* RIGHT */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* SEARCH */
+.search {
+  display: flex;
+  align-items: center;
+  background: #f5f7fb;
+  padding: 10px 14px;
+  border-radius: 999px;
+  gap: 8px;
+}
+
+.search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 180px;
+}
+
+/* LOGIN */
+.loginBtn {
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  font-weight: 600;
+}
+
+/* MOBILE BTN */
+.menuBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* MOBILE MENU */
+.mobileMenu {
+  display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .menu {
+    display: none;
+  }
+
+  .menuBtn {
+    display: block;
+  }
+
+  .mobileMenu {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 16px;
+    border-top: 1px solid #eee;
+  }
+
+  .mobileMenu a {
+    padding: 10px 0;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .search input {
+    width: 100px;
+  }
+}
+.headerLoginBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #111827;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.headerLoginBtn:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+}
+
+.headerAccountWrap {
+  position: relative;
+}
+
+.headerAvatarBtn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+.headerAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.headerAvatarFallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+}
+
+.headerAccountDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 240px;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+  z-index: 1000;
+}
+
+.headerAccountTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 12px;
+  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 6px;
+}
+
+.headerMiniAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.headerAccountName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.headerAccountEmail {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+  word-break: break-word;
+}
+
+.headerMenuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 11px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.headerMenuItem:hover {
+  background: #f8fafc;
+}
+
+.logoutItem {
+  color: #dc2626;
+}
+
+.headerAccountSkeleton {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #f3f4f6;
+}
+.profileWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profileBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 8px 4px 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profileBtn:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.profileAvatarImg {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.profileAvatarFallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f97316;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.profileChevron {
+  color: #6b7280;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+  padding: 8px;
+  z-index: 1000;
+}
+
+.profileItem {
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.profileItem:hover {
+  background: #f8fafc;
+}
+
+.logoutItem {
+  color: #dc2626;
+}
+
+.profileSkeleton {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #f3f4f6;
+}
+
+.mobileLogoutBtn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 12px 0;
+  font: inherit;
+  color: #dc2626;
+  cursor: pointer;
+}

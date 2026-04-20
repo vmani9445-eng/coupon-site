@@ -1,0 +1,265 @@
+.cashbackAdminPage {
+  padding: 24px;
+}
+
+.cashbackAdminTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cashbackAdminTop h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.cashbackAdminTop p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.cashbackStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.cashbackStatCard {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.cashbackStatCard span {
+  display: block;
+  font-size: 13px;
+  color: #667085;
+  margin-bottom: 8px;
+}
+
+.cashbackStatCard strong {
+  font-size: 24px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.cashbackFormCard {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.cashbackFormCard h3 {
+  margin: 0 0 14px;
+  color: #101828;
+}
+
+.cashbackFormGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cashbackInput,
+.cashbackFilter {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+
+.cashbackInput:focus,
+.cashbackFilter:focus {
+  border-color: #101828;
+}
+
+.cashbackFormActions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cashbackToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cashbackToolbar h3 {
+  margin: 0;
+  color: #101828;
+}
+
+.cashbackTableWrap {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  overflow: auto;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.cashbackTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1200px;
+}
+
+.cashbackTable thead th {
+  text-align: left;
+  font-size: 13px;
+  color: #667085;
+  font-weight: 700;
+  background: #f8fafc;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.cashbackTable tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f2f4f7;
+  vertical-align: top;
+  font-size: 14px;
+  color: #101828;
+}
+
+.cashbackUserCell,
+.cashbackStoreCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cashbackUserCell strong,
+.cashbackStoreCell strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.cashbackUserCell span,
+.cashbackStoreCell span {
+  font-size: 12px;
+  color: #667085;
+}
+
+.cashbackStatus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cashbackStatusPENDING,
+.cashbackStatusTRACKING {
+  background: #fff7ed;
+  color: #b54708;
+}
+
+.cashbackStatusCONFIRMED,
+.cashbackStatusPAYABLE {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.cashbackStatusREJECTED {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.cashbackStatusPAID {
+  background: #eef4ff;
+  color: #3538cd;
+}
+
+.cashbackReason {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #667085;
+  max-width: 180px;
+}
+
+.cashbackActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cashbackBtn {
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cashbackBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cashbackBtnConfirm {
+  background: #101828;
+  color: #fff;
+}
+
+.cashbackBtnReject {
+  background: #f04438;
+  color: #fff;
+}
+
+.cashbackEmpty {
+  text-align: center;
+  padding: 28px !important;
+  color: #667085 !important;
+}
+
+@media (max-width: 1100px) {
+  .cashbackFormGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashbackStatsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .cashbackAdminPage {
+    padding: 16px;
+  }
+
+  .cashbackFormGrid,
+  .cashbackStatsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cashbackToolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cashbackAdminTop h1 {
+    font-size: 22px;
+  }
+}

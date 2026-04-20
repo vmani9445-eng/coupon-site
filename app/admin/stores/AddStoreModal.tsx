@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { createStore } from "./actions";
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
 export default function AddStoreModal({ isOpen, onClose }: Props) {
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
 
   if (!isOpen) return null;
 
@@ -25,6 +26,7 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
         return;
       }
 
+      formRef.current?.reset();
       onClose();
     });
   };
@@ -37,6 +39,7 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
           className="adminModalClose"
           onClick={onClose}
           aria-label="Close"
+          disabled={isPending}
         >
           ×
         </button>
@@ -46,7 +49,7 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
           <p>Create a new store for coupons and cashback offers.</p>
         </div>
 
-        <form action={handleSubmit} className="adminForm">
+        <form ref={formRef} action={handleSubmit} className="adminForm">
           <div className="adminFormGrid">
             <div className="adminField">
               <label htmlFor="name">Store Name</label>
@@ -100,15 +103,20 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
             </div>
 
             <div className="adminField adminCheckboxField">
-              <label className="adminCheckboxRow">
-                <input name="isFeatured" type="checkbox" />
+              <label className="adminCheckboxRow" htmlFor="isFeatured">
+                <input id="isFeatured" name="isFeatured" type="checkbox" />
                 <span>Featured Store</span>
               </label>
             </div>
 
             <div className="adminField adminCheckboxField">
-              <label className="adminCheckboxRow">
-                <input name="isActive" type="checkbox" defaultChecked />
+              <label className="adminCheckboxRow" htmlFor="isActive">
+                <input
+                  id="isActive"
+                  name="isActive"
+                  type="checkbox"
+                  defaultChecked
+                />
                 <span>Active Store</span>
               </label>
             </div>
@@ -121,6 +129,7 @@ export default function AddStoreModal({ isOpen, onClose }: Props) {
               type="button"
               className="adminButton adminButtonGhost"
               onClick={onClose}
+              disabled={isPending}
             >
               Cancel
             </button>

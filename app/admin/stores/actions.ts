@@ -15,9 +15,17 @@ function makeSlug(value: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function normalizeLogoPath(value: string) {
+  const trimmed = value.trim();
+  return trimmed || null;
+}
+
 function sanitizeFileName(fileName: string) {
-  const ext = path.extname(fileName).toLowerCase();
-  const base = path.basename(fileName, ext);
+  const originalExt = path.extname(fileName).toLowerCase();
+  const allowedExts = [".png", ".jpg", ".jpeg", ".webp", ".svg"];
+  const ext = allowedExts.includes(originalExt) ? originalExt : ".png";
+
+  const base = path.basename(fileName, path.extname(fileName));
 
   const safeBase = base
     .trim()
@@ -29,6 +37,10 @@ function sanitizeFileName(fileName: string) {
 }
 
 async function saveUploadedFile(file: File, folder: string) {
+  if (!(file instanceof File) || file.size === 0) {
+    return null;
+  }
+
   if (!file.type.startsWith("image/")) {
     throw new Error("Only image files are allowed.");
   }
@@ -47,15 +59,24 @@ async function saveUploadedFile(file: File, folder: string) {
   return `/${folder}/${safeFileName}`;
 }
 
+function revalidateStorePaths(slug?: string | null) {
+  revalidatePath("/");
+  revalidatePath("/stores");
+  revalidatePath("/admin/stores");
+
+  if (slug) {
+    revalidatePath(`/stores/${slug}`);
+  }
+}
+
 export async function createStore(formData: FormData) {
   try {
     const name = String(formData.get("name") || "").trim();
     const description = String(formData.get("description") || "").trim();
     const websiteUrl = String(formData.get("websiteUrl") || "").trim();
-    const logo = String(formData.get("logo") || "").trim();
+    const logo = normalizeLogoPath(String(formData.get("logo") || ""));
     const isFeatured = formData.get("isFeatured") === "on";
     const isActive = formData.get("isActive") === "on";
-
     const logoFile = formData.get("logoFile");
 
     if (!name) {
@@ -64,21 +85,22 @@ export async function createStore(formData: FormData) {
 
     const slug = makeSlug(name);
 
-    const existing = await prisma.store.findFirst({
+    const existing = await prisma.store.findUnique({
       where: { slug },
+      select: { id: true },
     });
 
     if (existing) {
       return { ok: false, error: "A store with this slug already exists." };
     }
 
-    let finalLogo = logo || null;
+    let finalLogo = logo;
 
     if (logoFile instanceof File && logoFile.size > 0) {
       finalLogo = await saveUploadedFile(logoFile, "uploads/stores");
     }
 
-    await prisma.store.create({
+    const created = await prisma.store.create({
       data: {
         name,
         slug,
@@ -88,13 +110,17 @@ export async function createStore(formData: FormData) {
         isFeatured,
         isActive,
       },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        logo: true,
+      },
     });
 
-    revalidatePath("/admin/stores");
-    revalidatePath("/stores");
-    revalidatePath("/");
+    revalidateStorePaths(created.slug);
 
-    return { ok: true };
+    return { ok: true, store: created };
   } catch (error) {
     return {
       ok: false,
@@ -110,11 +136,12 @@ export async function updateStore(formData: FormData) {
     const name = String(formData.get("name") || "").trim();
     const description = String(formData.get("description") || "").trim();
     const websiteUrl = String(formData.get("websiteUrl") || "").trim();
-    const logo = String(formData.get("logo") || "").trim();
-    const currentLogo = String(formData.get("currentLogo") || "").trim();
+    const logo = normalizeLogoPath(String(formData.get("logo") || ""));
+    const currentLogo = normalizeLogoPath(
+      String(formData.get("currentLogo") || "")
+    );
     const isFeatured = formData.get("isFeatured") === "on";
     const isActive = formData.get("isActive") === "on";
-
     const logoFile = formData.get("logoFile");
 
     if (!id) {
@@ -125,26 +152,40 @@ export async function updateStore(formData: FormData) {
       return { ok: false, error: "Store name is required." };
     }
 
+    const existingStore = await prisma.store.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        slug: true,
+        logo: true,
+      },
+    });
+
+    if (!existingStore) {
+      return { ok: false, error: "Store not found." };
+    }
+
     const slug = makeSlug(name);
 
-    const existing = await prisma.store.findFirst({
+    const conflictingStore = await prisma.store.findFirst({
       where: {
         slug,
         NOT: { id },
       },
+      select: { id: true },
     });
 
-    if (existing) {
+    if (conflictingStore) {
       return { ok: false, error: "Another store already uses this slug." };
     }
 
-    let finalLogo = logo || currentLogo || null;
+    let finalLogo = logo || currentLogo || existingStore.logo || null;
 
     if (logoFile instanceof File && logoFile.size > 0) {
       finalLogo = await saveUploadedFile(logoFile, "uploads/stores");
     }
 
-    await prisma.store.update({
+    const updated = await prisma.store.update({
       where: { id },
       data: {
         name,
@@ -155,14 +196,18 @@ export async function updateStore(formData: FormData) {
         isFeatured,
         isActive,
       },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        logo: true,
+      },
     });
 
-    revalidatePath("/admin/stores");
-    revalidatePath("/stores");
-    revalidatePath("/");
-    revalidatePath(`/stores/${slug}`);
+    revalidateStorePaths(existingStore.slug);
+    revalidateStorePaths(updated.slug);
 
-    return { ok: true };
+    return { ok: true, store: updated };
   } catch (error) {
     return {
       ok: false,
@@ -182,7 +227,8 @@ export async function deleteStore(formData: FormData) {
 
     const store = await prisma.store.findUnique({
       where: { id },
-      include: {
+      select: {
+        slug: true,
         _count: {
           select: {
             coupons: true,
@@ -207,9 +253,7 @@ export async function deleteStore(formData: FormData) {
       where: { id },
     });
 
-    revalidatePath("/admin/stores");
-    revalidatePath("/stores");
-    revalidatePath("/");
+    revalidateStorePaths(store.slug);
 
     return { ok: true };
   } catch (error) {

@@ -1,0 +1,223 @@
+.clickLogsPage {
+  padding: 24px;
+}
+
+.clickLogsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.clickLogsHeader h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.clickLogsHeader p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.clickLogsStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.clickLogsStatCard {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.clickLogsStatCard span {
+  display: block;
+  font-size: 13px;
+  color: #667085;
+  margin-bottom: 8px;
+}
+
+.clickLogsStatCard strong {
+  font-size: 24px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.clickLogsToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.clickLogsToolbarLeft h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #101828;
+}
+
+.clickLogsFilters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.clickLogsSelect {
+  min-width: 160px;
+  height: 42px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+}
+
+.clickLogsSelect:focus {
+  border-color: #101828;
+}
+
+.clickLogsTableWrap {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  overflow: auto;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.clickLogsTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1300px;
+}
+
+.clickLogsTable thead th {
+  text-align: left;
+  font-size: 13px;
+  color: #667085;
+  font-weight: 700;
+  background: #f8fafc;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.clickLogsTable tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f2f4f7;
+  vertical-align: top;
+  font-size: 14px;
+  color: #101828;
+}
+
+.clickLogsUserCell,
+.clickLogsStoreCell,
+.clickLogsSourceCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clickLogsUserCell strong,
+.clickLogsStoreCell strong,
+.clickLogsSourceCell strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.clickLogsUserCell span,
+.clickLogsStoreCell span,
+.clickLogsSourceCell span {
+  font-size: 12px;
+  color: #667085;
+}
+
+.clickLogsMono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.clickLogsTargetCell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clickLogsStatus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.clickLogsStatusCLICKED,
+.clickLogsStatusPENDING {
+  background: #fff7ed;
+  color: #b54708;
+}
+
+.clickLogsStatusREDIRECTED {
+  background: #eef4ff;
+  color: #3538cd;
+}
+
+.clickLogsStatusTRACKED,
+.clickLogsStatusCONFIRMED {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.clickLogsStatusREJECTED {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.clickLogsStatusPAID {
+  background: #f5f3ff;
+  color: #6938ef;
+}
+
+.clickLogsEmpty {
+  text-align: center;
+  padding: 28px !important;
+  color: #667085 !important;
+}
+
+@media (max-width: 1100px) {
+  .clickLogsStatsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .clickLogsPage {
+    padding: 16px;
+  }
+
+  .clickLogsStatsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .clickLogsHeader h1 {
+    font-size: 22px;
+  }
+
+  .clickLogsSelect {
+    width: 100%;
+  }
+}

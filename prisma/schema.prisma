@@ -8,33 +8,56 @@ datasource db {
 }
 
 model Store {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  logo        String?
-  websiteUrl  String?
-  isFeatured  Boolean  @default(false)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                    String   @id @default(cuid())
+  name                  String
+  slug                  String   @unique
+  description           String?
+  logo                  String?
+  websiteUrl            String?
+  isFeatured            Boolean  @default(false)
+  isActive              Boolean  @default(true)
+  cashbackPercentToUser Int      @default(70)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  coupons  Coupon[]
-  cashback CashbackOffer[]
+  coupons              Coupon[]
+  cashbackOffers       CashbackOffer[]
+  clickLogs            ClickLog[]
+  cashbackTransactions CashbackTransaction[]
+
+  @@index([slug])
+  @@index([isFeatured])
+  @@index([isActive])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  coupons Coupon[]
 }
 
 model Coupon {
-  id           String       @id @default(cuid())
-  storeId      String
-  source       String // amazon, flipkart, cuelinks, manual
+  id         String  @id @default(cuid())
+  storeId    String
+  categoryId String?
+
+  source       String
   externalId   String?
   title        String
   description  String?
   code         String?
   discount     String?
-  category     String?
   bank         String?
   affiliateUrl String?
+
+  networkCashback Float?
+  userCashback    Float?
+  adminMargin     Float?
+  cashbackLabel   String?
+
   expiresAt    DateTime?
   verified     Boolean      @default(true)
   isFeatured   Boolean      @default(false)
@@ -43,42 +66,59 @@ model Coupon {
   clicks       Int          @default(0)
   usesToday    Int          @default(0)
   terms        Json?
+  rawPayload   Json?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  rawPayload   Json?
 
-  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  store    Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  clickLogs            ClickLog[]
+  cashbackTransactions CashbackTransaction[]
 
   @@unique([source, externalId], name: "coupon_source_externalId")
   @@index([storeId])
-  @@index([source])
+  @@index([categoryId])
 }
 
 model CashbackOffer {
-  id            String    @id @default(cuid())
-  storeId       String
-  source        String // amazon, flipkart, cuelinks, manual
-  externalId    String?
-  title         String
-  description   String?
-  cashbackType  String // percent | flat
-  cashbackValue Float
-  affiliateUrl  String
-  terms         String?
-  isFeatured    Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  startsAt      DateTime?
-  endsAt        DateTime?
-  clicks        Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  rawPayload    Json?
+  id               String       @id @default(cuid())
+  storeId          String
+  source           String
+  externalId       String?
+  title            String
+  description      String?
+  cashbackType     CashbackType
+  cashbackValue    Float
+  affiliateUrl     String
+  terms            String?
 
-  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  // NEW
+  networkCashback  Float?       // e.g. 7.5
+  userCashback     Float?       // e.g. 5
+  adminMargin      Float?       // e.g. 2.5
+  cashbackLabel    String?      // e.g. "Up to 5%"
+
+  isFeatured       Boolean      @default(false)
+  isActive         Boolean      @default(true)
+  startsAt         DateTime?
+  endsAt           DateTime?
+  clicks           Int          @default(0)
+  rawPayload       Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  store                Store                 @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  clickLogs            ClickLog[]
+  cashbackTransactions CashbackTransaction[]
 
   @@unique([source, externalId], name: "cashback_source_externalId")
   @@index([storeId])
   @@index([source])
+  @@index([isFeatured])
+  @@index([isActive])
+  @@index([startsAt])
+  @@index([endsAt])
 }
 
 model CouponSubmission {
@@ -96,11 +136,14 @@ model CouponSubmission {
   status       SubmissionStatus @default(PENDING)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
+
+  @@index([status])
+  @@index([storeSlug])
 }
 
 model OfferClick {
   id          String   @id @default(cuid())
-  offerType   String // coupon | cashback
+  offerType   String
   offerId     String
   source      String?
   storeSlug   String?
@@ -109,29 +152,32 @@ model OfferClick {
 
   @@index([offerType, offerId])
   @@index([storeSlug])
+  @@index([createdAt])
 }
 
 model PromoBanner {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   title          String
   subtitle       String?
   imageUrl       String
   mobileImageUrl String?
   ctaText        String?
   ctaUrl         String?
-  bannerType     String   // hero | horizontal | vertical | square
-  placement      String   // homepage_top | homepage_middle | sidebar | store_page | category_page
+  bannerType     String
+  placement      String
   storeSlug      String?
   category       String?
-  source         String?  // manual | affiliate
+  source         String?
   externalId     String?
-  priority       Int      @default(0)
-  isActive       Boolean  @default(true)
+  priority       Int       @default(0)
+  isActive       Boolean   @default(true)
   startsAt       DateTime?
   endsAt         DateTime?
   rawPayload     Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  clickLogs ClickLog[]
 
   @@index([placement])
   @@index([category])
@@ -143,7 +189,7 @@ model PromoBanner {
 
 model HomepageSectionControl {
   id         String   @id @default(cuid())
-  sectionKey String   @unique // hero, great_offers, top_brands, categories, featured_coupons, promo_row
+  sectionKey String   @unique
   title      String
   isActive   Boolean  @default(true)
   sortOrder  Int      @default(0)
@@ -155,7 +201,7 @@ model HomepageSectionControl {
 }
 
 model HomepageFeaturedOffer {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   title         String
   subtitle      String?
   imageUrl      String?
@@ -167,24 +213,255 @@ model HomepageFeaturedOffer {
   bankOfferText String?
   cashbackText  String?
   validTillText String?
-  ctaText       String?  @default("View Deal")
+  ctaText       String?   @default("View Deal")
   ctaUrl        String?
   category      String?
-  source        String?  // manual | affiliate
+  source        String?
   externalId    String?
-  priority      Int      @default(0)
-  isActive      Boolean  @default(true)
+  priority      Int       @default(0)
+  isActive      Boolean   @default(true)
   startsAt      DateTime?
   endsAt        DateTime?
   rawPayload    Json?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@index([storeSlug])
   @@index([category])
   @@index([isActive])
   @@index([priority])
   @@index([source])
+}
+
+model User {
+  id                 String     @id @default(cuid())
+  name               String?
+  email              String     @unique
+  passwordHash       String?
+  phone              String?
+  image              String?
+  role               UserRole   @default(USER)
+  status             UserStatus @default(ACTIVE)
+  isActive           Boolean    @default(true)
+  emailVerifiedAt    DateTime?
+  lastSeenAt         DateTime?
+  referralCode       String?    @unique
+  referredByUserId   String?
+  upiId              String?
+  upiName            String?
+  giftCardPreference String?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  // ✅ ADD THIS LINE
+  supportTickets SupportTicket[]
+
+  referredBy           User?                 @relation("UserReferrals", fields: [referredByUserId], references: [id], onDelete: SetNull)
+  referrals            User[]                @relation("UserReferrals")
+  sessions             UserSession[]
+  clickLogs            ClickLog[]
+  wallet               Wallet?
+  walletLedgerEntries  WalletLedger[]
+  cashbackTransactions CashbackTransaction[]
+  withdrawalRequests   WithdrawalRequest[]
+
+  @@index([role])
+  @@index([status])
+  @@index([isActive])
+  @@index([lastSeenAt])
+  @@index([referralCode])
+  @@index([referredByUserId])
+}
+
+model UserSession {
+  id         String    @id @default(cuid())
+  userId     String?
+  sessionKey String    @unique
+  ipAddress  String?
+  userAgent  String?
+  isActive   Boolean   @default(true)
+  lastSeenAt DateTime  @default(now())
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clickLogs ClickLog[]
+
+  @@index([userId])
+  @@index([sessionKey])
+  @@index([lastSeenAt])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+model Wallet {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  pendingBalance    Int      @default(0)
+  confirmedBalance  Int      @default(0)
+  availableBalance  Int      @default(0)
+  lifetimeEarned    Int      @default(0)
+  lifetimeWithdrawn Int      @default(0)
+  lifetimeRejected  Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ledgerEntries        WalletLedger[]
+  cashbackTransactions CashbackTransaction[]
+
+  @@index([availableBalance])
+  @@index([pendingBalance])
+  @@index([confirmedBalance])
+}
+
+model WalletLedger {
+  id            String               @id @default(cuid())
+  userId        String
+  walletId      String?
+  entryType     WalletEntryType
+  amount        Int
+  status        LedgerStatus         @default(COMPLETED)
+  description   String?
+  referenceType LedgerReferenceType?
+  referenceId   String?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet Wallet? @relation(fields: [walletId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([walletId])
+  @@index([entryType])
+  @@index([status])
+  @@index([referenceType, referenceId])
+  @@index([createdAt])
+}
+
+model CashbackTransaction {
+  id                   String         @id @default(cuid())
+  userId               String
+  walletId             String?
+  clickLogId           String?
+  storeId              String?
+  couponId             String?
+  cashbackOfferId      String?
+  source               String?
+  externalOrderId      String?
+  externalTrackingId   String?
+  orderAmount          Int?
+  commissionAmount     Int?
+  cashbackAmount       Int
+  platformMarginAmount Int?
+  status               CashbackStatus @default(PENDING)
+  purchaseAt           DateTime?
+  trackedAt            DateTime       @default(now())
+  confirmedAt          DateTime?
+  rejectedAt           DateTime?
+  payableAt            DateTime?
+  paidAt               DateTime?
+  rejectionReason      String?
+  adminNotes           String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet        Wallet?        @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  clickLog      ClickLog?      @relation(fields: [clickLogId], references: [id], onDelete: SetNull)
+  store         Store?         @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  coupon        Coupon?        @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  cashbackOffer CashbackOffer? @relation(fields: [cashbackOfferId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([walletId])
+  @@index([clickLogId])
+  @@index([storeId])
+  @@index([couponId])
+  @@index([cashbackOfferId])
+  @@index([status])
+  @@index([trackedAt])
+  @@index([confirmedAt])
+  @@index([payableAt])
+  @@index([paidAt])
+  @@index([externalOrderId])
+  @@index([externalTrackingId])
+}
+
+model WithdrawalRequest {
+  id                String           @id @default(cuid())
+  userId            String
+  amount            Int
+  method            WithdrawalMethod
+  status            WithdrawalStatus @default(PENDING)
+  upiId             String?
+  upiName           String?
+  giftCardType      String?
+  giftCardEmail     String?
+  adminNotes        String?
+  processedByUserId String?
+  requestedAt       DateTime         @default(now())
+  processedAt       DateTime?
+  paidAt            DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([method])
+  @@index([status])
+  @@index([requestedAt])
+  @@index([processedByUserId])
+}
+
+model ClickLog {
+  id String @id @default(cuid())
+
+  userId     String?
+  sessionId  String?
+  storeId    String?
+  couponId   String?
+  cashbackId String?
+  bannerId   String?
+
+  trackingCode String?     @unique
+  clickType    ClickType
+  targetUrl    String
+  sourcePage   String?
+  sourceLabel  String?
+  storeSlug    String?
+  userEmail    String?
+  ipAddress    String?
+  userAgent    String?
+  referrer     String?
+  status       ClickStatus @default(CLICKED)
+
+  clickedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user                 User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+  session              UserSession?          @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  store                Store?                @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  coupon               Coupon?               @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  cashback             CashbackOffer?        @relation(fields: [cashbackId], references: [id], onDelete: SetNull)
+  banner               PromoBanner?          @relation(fields: [bannerId], references: [id], onDelete: SetNull)
+  cashbackTransactions CashbackTransaction[]
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([storeId])
+  @@index([couponId])
+  @@index([cashbackId])
+  @@index([bannerId])
+  @@index([clickType])
+  @@index([status])
+  @@index([storeSlug])
+  @@index([clickedAt])
+  @@index([userEmail])
+  @@index([trackingCode])
 }
 
 enum CouponStatus {
@@ -197,4 +474,97 @@ enum SubmissionStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum CashbackType {
+  PERCENT
+  FLAT
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  SUSPENDED
+}
+
+enum ClickType {
+  COUPON
+  CASHBACK
+  BANNER
+  STORE
+}
+
+enum ClickStatus {
+  CLICKED
+  REDIRECTED
+  TRACKED
+  PENDING
+  CONFIRMED
+  REJECTED
+  PAID
+}
+
+enum CashbackStatus {
+  TRACKING
+  PENDING
+  CONFIRMED
+  REJECTED
+  PAYABLE
+  PAID
+}
+
+enum WalletEntryType {
+  CASHBACK_PENDING
+  CASHBACK_CONFIRMED
+  CASHBACK_REJECTED
+  WITHDRAWAL_REQUEST
+  WITHDRAWAL_APPROVED
+  WITHDRAWAL_REJECTED
+  WITHDRAWAL_PAID
+  ADMIN_CREDIT
+  ADMIN_DEBIT
+  ADJUSTMENT
+}
+
+enum LedgerStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum LedgerReferenceType {
+  CASHBACK_TRANSACTION
+  WITHDRAWAL_REQUEST
+  CLICK_LOG
+  ADMIN_ACTION
+}
+
+enum WithdrawalMethod {
+  UPI
+  GIFT_CARD
+  BANK_TRANSFER
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("OPEN") // OPEN / CLOSED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
 }

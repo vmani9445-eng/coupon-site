@@ -1,16 +1,21 @@
 import "./globals.css";
-import Header from "./Components/header";
+import Navbar from "./Components/Navbar";
+import SessionTracker from "./Components/SessionTracker";
+import AuthProvider from "./Components/AuthProvider";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <AuthProvider>
+          <SessionTracker />
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

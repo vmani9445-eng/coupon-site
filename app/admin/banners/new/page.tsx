@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { createBanner } from "../actions";
 
 const bannerTypes = ["hero", "horizontal", "vertical", "square"];
@@ -9,257 +12,157 @@ const placements = [
   "homepage_top_right_bottom",
   "homepage_middle_strip",
   "homepage_lower_box",
-  "store_page",
-  "category_page",
 ];
 
 export default function NewBannerPage() {
+  const [imageUrl, setImageUrl] = useState("");
+  const [mobileImageUrl, setMobileImageUrl] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [mobilePreview, setMobilePreview] = useState("");
+
+  const desktopPreview = useMemo(() => imagePreview || imageUrl, [imagePreview, imageUrl]);
+  const mobilePreviewSrc = useMemo(
+    () => mobilePreview || mobileImageUrl,
+    [mobilePreview, mobileImageUrl]
+  );
+
+  const handleFilePreview = (
+    file: File | null,
+    setPreview: (value: string) => void
+  ) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+  };
+
   return (
     <div className="adminPage">
       <div className="adminPageHeader">
         <div>
           <h1>Add Banner</h1>
-          <p>Create a new homepage, category, store, or promotional banner.</p>
+          <p>Upload banner images and preview before saving.</p>
         </div>
 
-        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-          <Link href="/admin/banners" className="adminButton">
-            Back to Banners
-          </Link>
-          <Link href="/admin" className="adminButton">
-            Dashboard
-          </Link>
-        </div>
+        <Link href="/admin/banners" className="adminButton">
+          Back
+        </Link>
       </div>
 
-      <section
-        className="adminTableCard"
-        style={{
-          marginTop: "24px",
-          padding: "24px",
-          borderRadius: "20px",
-          background: "#fff",
-        }}
-      >
-        <form action={createBanner} className="adminBannerForm">
+      <div className="adminTableCard" style={{ padding: 24 }}>
+        <form action={createBanner} className="adminForm">
           <div className="adminFormGrid">
-            <div className="adminFormField">
-              <label htmlFor="title">Title</label>
-              <input id="title" name="title" type="text" required />
-            </div>
-
-            <div className="adminFormField">
-              <label htmlFor="subtitle">Subtitle</label>
-              <input id="subtitle" name="subtitle" type="text" />
-            </div>
-
-            <div className="adminFormField adminFormFieldFull">
+            <div className="adminField adminFieldFull">
               <label htmlFor="imageFile">Upload Banner Image</label>
               <input
                 id="imageFile"
                 name="imageFile"
                 type="file"
                 accept="image/*"
+                onChange={(e) =>
+                  handleFilePreview(e.target.files?.[0] || null, setImagePreview)
+                }
               />
-              <small className="adminFieldHelp">
-                Upload a banner image directly, or use the image URL field below.
-              </small>
             </div>
 
-            <div className="adminFormField adminFormFieldFull">
+            <div className="adminField adminFieldFull">
               <label htmlFor="imageUrl">Image URL or Local Path</label>
               <input
                 id="imageUrl"
                 name="imageUrl"
                 type="text"
-                placeholder="/uploads/banners/flipkart-sale.jpg"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
               />
-              <small className="adminFieldHelp">
-                Example: /uploads/banners/flipkart-sale.jpg
-              </small>
             </div>
 
-            <div className="adminFormField adminFormFieldFull">
+            <div className="adminField adminFieldFull">
               <label htmlFor="mobileImageFile">Upload Mobile Banner Image</label>
               <input
                 id="mobileImageFile"
                 name="mobileImageFile"
                 type="file"
                 accept="image/*"
+                onChange={(e) =>
+                  handleFilePreview(e.target.files?.[0] || null, setMobilePreview)
+                }
               />
             </div>
 
-            <div className="adminFormField adminFormFieldFull">
+            <div className="adminField adminFieldFull">
               <label htmlFor="mobileImageUrl">Mobile Image URL or Local Path</label>
               <input
                 id="mobileImageUrl"
                 name="mobileImageUrl"
                 type="text"
-                placeholder="/uploads/banners/mobile-banner.jpg"
+                value={mobileImageUrl}
+                onChange={(e) => setMobileImageUrl(e.target.value)}
               />
             </div>
 
-            <div className="adminFormField">
+            <div className="adminField">
               <label htmlFor="ctaText">CTA Text</label>
-              <input
-                id="ctaText"
-                name="ctaText"
-                type="text"
-                placeholder="Shop Now"
-              />
+              <input id="ctaText" name="ctaText" placeholder="Shop Now" />
             </div>
 
-            <div className="adminFormField">
+            <div className="adminField">
               <label htmlFor="ctaUrl">CTA URL</label>
-              <input
-                id="ctaUrl"
-                name="ctaUrl"
-                type="text"
-                placeholder="/stores/flipkart"
-              />
+              <input id="ctaUrl" name="ctaUrl" placeholder="/stores/amazon" />
             </div>
 
-            <div className="adminFormField">
+            <div className="adminField">
               <label htmlFor="bannerType">Banner Type</label>
-              <select
-                id="bannerType"
-                name="bannerType"
-                defaultValue="hero"
-                required
-              >
-                {bannerTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
+              <select id="bannerType" name="bannerType" defaultValue="hero">
+                {bannerTypes.map((t) => (
+                  <option key={t}>{t}</option>
                 ))}
               </select>
-              <small className="adminFieldHelp">
-                hero = main hero banner, horizontal = strip, vertical = tall,
-                square = promo box.
-              </small>
             </div>
 
-            <div className="adminFormField">
+            <div className="adminField">
               <label htmlFor="placement">Placement</label>
-              <select
-                id="placement"
-                name="placement"
-                defaultValue="homepage_top"
-                required
-              >
-                {placements.map((placement) => (
-                  <option key={placement} value={placement}>
-                    {placement}
-                  </option>
+              <select id="placement" name="placement" defaultValue="homepage_top">
+                {placements.map((p) => (
+                  <option key={p}>{p}</option>
                 ))}
               </select>
-
-              <small className="adminFieldHelp">
-                homepage_top → Main hero slider banner
-                <br />
-                homepage_top_right_top → Hero right top
-                <br />
-                homepage_top_right_bottom → Hero right bottom
-                <br />
-                homepage_middle_strip → Banner below top brands
-                <br />
-                homepage_lower_box → Bottom promo banner
-              </small>
             </div>
 
-            <div className="adminFormField">
-              <label htmlFor="storeSlug">Store Slug</label>
-              <input
-                id="storeSlug"
-                name="storeSlug"
-                type="text"
-                placeholder="flipkart"
-              />
-            </div>
-
-            <div className="adminFormField">
-              <label htmlFor="category">Category</label>
-              <input
-                id="category"
-                name="category"
-                type="text"
-                placeholder="Electronics"
-              />
-            </div>
-
-            <div className="adminFormField">
-              <label htmlFor="source">Source</label>
-              <input
-                id="source"
-                name="source"
-                type="text"
-                defaultValue="manual"
-                placeholder="manual"
-              />
-            </div>
-
-            <div className="adminFormField">
-              <label htmlFor="externalId">External ID</label>
-              <input id="externalId" name="externalId" type="text" />
-            </div>
-
-            <div className="adminFormField">
+            <div className="adminField">
               <label htmlFor="priority">Priority</label>
-              <input
-                id="priority"
-                name="priority"
-                type="number"
-                defaultValue={10}
-                min={0}
-              />
-              <small className="adminFieldHelp">
-                Higher priority shows first when multiple banners use the same
-                placement.
-              </small>
+              <input id="priority" name="priority" type="number" defaultValue={10} />
             </div>
 
-            <div className="adminFormField">
-              <label htmlFor="startsAt">Starts At</label>
-              <input id="startsAt" name="startsAt" type="datetime-local" />
-            </div>
-
-            <div className="adminFormField">
-              <label htmlFor="endsAt">Ends At</label>
-              <input id="endsAt" name="endsAt" type="datetime-local" />
-            </div>
-
-            <div className="adminFormField adminFormCheckboxField">
-              <label htmlFor="isActive">Active Banner</label>
-              <input
-                id="isActive"
-                name="isActive"
-                type="checkbox"
-                defaultChecked
-              />
+            <div className="adminField adminCheckboxField">
+              <label className="adminCheckboxRow" htmlFor="isActive">
+                <input id="isActive" name="isActive" type="checkbox" defaultChecked />
+                <span>Active Banner</span>
+              </label>
             </div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              marginTop: "24px",
-              flexWrap: "wrap",
-            }}
-          >
+          <div className="adminBannerPreviewGrid">
+            <div className="adminBannerPreviewCard">
+              <span className="adminBannerPreviewLabel">Desktop Preview</span>
+              {desktopPreview ? <img src={desktopPreview} alt="" /> : <div>No image</div>}
+            </div>
+
+            <div className="adminBannerPreviewCard">
+              <span className="adminBannerPreviewLabel">Mobile Preview</span>
+              {mobilePreviewSrc ? (
+                <img src={mobilePreviewSrc} alt="" />
+              ) : (
+                <div>No image</div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 24 }}>
             <button type="submit" className="adminButton">
               Save Banner
             </button>
-
-            <Link
-              href="/admin/banners"
-              className="adminButton adminButtonSecondary"
-            >
-              Cancel
-            </Link>
           </div>
         </form>
-      </section>
+      </div>
     </div>
   );
 }

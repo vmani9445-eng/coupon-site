@@ -1,0 +1,755 @@
+:root {
+  --activation-bg: #f5f7fb;
+  --activation-surface: #ffffff;
+  --activation-surface-soft: #fafbfe;
+  --activation-line: #e7ebf2;
+  --activation-line-strong: #d7ddea;
+  --activation-text: #111827;
+  --activation-muted: #667085;
+  --activation-navy: #123053;
+  --activation-navy-2: #172f4d;
+  --activation-blue: #5b4ef7;
+  --activation-blue-soft: #eef1ff;
+  --activation-green: #1e8e4d;
+  --activation-green-soft: #edf8f1;
+  --activation-shadow:
+    0 12px 28px rgba(17, 24, 39, 0.06),
+    0 2px 10px rgba(17, 24, 39, 0.03);
+  --activation-radius-xl: 24px;
+  --activation-radius-lg: 18px;
+  --activation-radius-md: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.activationPage {
+  min-height: 100vh;
+  background: var(--activation-bg);
+  color: var(--activation-text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.activationContainer {
+  width: min(980px, calc(100% - 28px));
+  margin: 0 auto;
+}
+
+.activationHero {
+  background: var(--activation-navy);
+  padding: 22px 0 34px;
+}
+
+.activationBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, 0.86);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.activationBack:hover {
+  color: #ffffff;
+}
+
+.activationHeroCard {
+  background: var(--activation-surface);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: var(--activation-shadow);
+  overflow: hidden;
+}
+
+.activationTop {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 24px;
+  padding: 26px;
+  align-items: start;
+}
+
+.activationVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activationLogoBox {
+  height: 154px;
+  border-radius: 18px;
+  border: 1px solid var(--activation-line);
+  background: var(--activation-surface-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.activationLogoImage {
+  max-width: 100%;
+  max-height: 76px;
+  object-fit: contain;
+}
+
+.activationLogoFallback {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  background: #edf1fb;
+  color: #364152;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.activationDiscountBadge {
+  min-height: 54px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6658ff 0%, #7b67ff 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  box-shadow: 0 10px 20px rgba(91, 78, 247, 0.18);
+}
+
+.activationMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activationBrandRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.activationBrandName {
+  font-size: 14px;
+  font-weight: 800;
+  color: #566173;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.activationProgressDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activationProgressDots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #23385a;
+}
+
+.activationBrandStatus {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: #25364b;
+}
+
+.activationEligibility {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--activation-muted);
+}
+
+.activationEligibilitySuccess {
+  color: var(--activation-green);
+  font-weight: 700;
+}
+
+.activationTitle {
+  margin: 0;
+ letter-spacing: -.04em;
+  color: #152136;
+  margin: 0;
+  font-size: clamp(23px, 2vw, 44px);
+  font-weight: 700;
+  line-height: 1.04;
+  
+}
+
+.activationCashbackInline {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: fit-content;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--activation-green-soft);
+  color: var(--activation-green);
+  border: 1px solid #d3ebda;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.activationCashbackIcon {
+  font-size: 15px;
+}
+
+.activationCashbackInline strong {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.activationLoadingLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  width: fit-content;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid var(--activation-line);
+  color: #556274;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.activationLoaderDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.activationLoaderDots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--activation-blue);
+  opacity: 0.28;
+  animation: activationPulse 1.2s infinite ease-in-out;
+}
+
+.activationLoaderDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.activationLoaderDots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes activationPulse {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.82);
+    opacity: 0.28;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.activationCodeBox {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--activation-line);
+  background: var(--activation-surface-soft);
+}
+
+.activationCodeHint {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5d687a;
+}
+
+.activationCouponCode,
+.activationNoCode {
+  min-height: 54px;
+  border-radius: 16px;
+  border: 1px dashed #cad1df;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  text-align: center;
+  color: #263143;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.activationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.activationStoreBtn,
+.activationLoginBtn {
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.activationStoreBtn {
+  background: linear-gradient(135deg, #5b4ef7 0%, #7465ff 100%);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(91, 78, 247, 0.16);
+}
+
+.activationLoginBtn {
+  background: #fff;
+  color: #182132;
+  border: 1px solid var(--activation-line-strong);
+}
+
+.activationStoreBtn:hover,
+.activationLoginBtn:hover,
+.activationOfferCard:hover {
+  transform: translateY(-1px);
+}
+
+.activationLoggedInNote {
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--activation-green-soft);
+  border: 1px solid #d2ead9;
+  color: var(--activation-green);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.activationContent {
+  padding: 26px 0 34px;
+}
+
+.activationContentGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.activationSection {
+  background: var(--activation-surface);
+  border: 1px solid var(--activation-line);
+  border-radius: 12px;
+  padding: 20px;
+
+}
+
+.activationSectionTitle {
+  margin: 0 0 14px;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #152136;
+}
+
+.activationTermsSection {
+  padding-bottom: 14px;
+}
+
+.activationChecklist {
+  display: grid;
+  gap: 12px;
+}
+
+.activationChecklistItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.activationCheck {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border-radius: 999px;
+  background: #ecf8f0;
+  color: var(--activation-green);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+  margin-top: 2px;
+}
+
+.activationChecklistItem p {
+  margin: 0;
+  color: #49566b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.activationSimilarGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.activationOfferCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--activation-line);
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.activationOfferTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.activationOfferLogo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--activation-line);
+  background: var(--activation-surface-soft);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.activationOfferLogoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.activationOfferLogoFallback {
+  font-size: 20px;
+  font-weight: 900;
+  color: #384255;
+}
+
+.activationOfferDiscount {
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--activation-blue-soft);
+  color: var(--activation-blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.activationOfferCashback {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: var(--activation-green-soft);
+  color: var(--activation-green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.activationOfferTitle {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.38;
+  font-weight: 800;
+  color: #162136;
+}
+
+.activationOfferBtn {
+  min-height: 42px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #16223a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.activationReferBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #4e53b8 0%, #5963d6 100%);
+  color: #fff;
+  box-shadow: var(--activation-shadow);
+}
+
+.activationReferText h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.activationReferText p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 560px;
+}
+
+.activationReferArt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.activationBubble {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #67a3ff 0%, #2ed2a3 100%);
+}
+
+.activationBubble:nth-child(2) {
+  width: 28px;
+  height: 28px;
+  opacity: 0.84;
+}
+
+.activationBubble:nth-child(3) {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+@media (max-width: 980px) {
+  .activationTop {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 20px;
+  }
+
+  .activationVisual {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .activationLogoBox {
+    flex: 1;
+    height: 128px;
+  }
+
+  .activationDiscountBadge {
+    min-width: 126px;
+    align-self: stretch;
+  }
+
+  .activationSimilarGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .activationContainer {
+    width: min(100%, calc(100% - 18px));
+  }
+
+  .activationHero {
+    padding: 16px 0 22px;
+  }
+
+  .activationHeroCard,
+  .activationSection,
+  .activationReferBanner {
+    border-radius: 18px;
+  }
+
+  .activationTop {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .activationVisual {
+    flex-direction: column;
+  }
+
+  .activationLogoBox {
+    height: 110px;
+  }
+
+  .activationDiscountBadge {
+    min-width: 0;
+    min-height: 46px;
+    font-size: 17px;
+  }
+
+  .activationTitle {
+    font-size: 28px;
+  }
+
+  .activationEligibility,
+  .activationLoadingLine,
+  .activationChecklistItem p {
+    font-size: 14px;
+  }
+
+  .activationCouponCode,
+  .activationNoCode {
+    min-height: 50px;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+  }
+
+  .activationStoreBtn,
+  .activationLoginBtn,
+  .activationLoggedInNote {
+    width: 100%;
+  }
+
+  .activationSimilarGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .activationReferBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.activationEligibility {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--activation-muted);
+  font-weight: 600;
+}
+
+.activationEligibility strong {
+  color: var(--activation-blue);
+  font-weight: 900;
+}
+
+.activationEligibilitySuccess {
+  color: var(--activation-green);
+}
+
+.activationEligibilitySuccess strong {
+  color: var(--activation-green);
+}
+.activationBrandRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.activationBrandName {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #111827;
+}
+
+.activationProgressDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activationProgressDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #4f46e5;
+  opacity: 0.2;
+  transform: scale(0.8);
+  animation: activationDotPulse 1.4s infinite ease-in-out;
+}
+
+.activationProgressDots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.activationProgressDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.activationProgressDots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.activationProgressDots span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.activationProgressDots span:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+.activationBrandStatus {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #4b5563;
+}
+
+@keyframes activationDotPulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}

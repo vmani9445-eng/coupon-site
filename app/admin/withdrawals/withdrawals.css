@@ -1,0 +1,251 @@
+.withdrawalsPage {
+  padding: 24px;
+}
+
+.withdrawalsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.withdrawalsHeader h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.withdrawalsHeader p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.withdrawalsStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.withdrawalsStatCard {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.withdrawalsStatCard span {
+  display: block;
+  font-size: 13px;
+  color: #667085;
+  margin-bottom: 8px;
+}
+
+.withdrawalsStatCard strong {
+  font-size: 24px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.withdrawalsSection {
+  background: transparent;
+}
+
+.withdrawalsTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.withdrawalsSectionHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #101828;
+}
+
+.withdrawalsFilters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.withdrawalsSearchInput,
+.withdrawalsSelect {
+  min-width: 180px;
+  height: 42px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+}
+
+.withdrawalsSearchInput:focus,
+.withdrawalsSelect:focus {
+  border-color: #101828;
+}
+
+.withdrawalsTableWrap {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  overflow: auto;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.05);
+}
+
+.withdrawalsTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1200px;
+}
+
+.withdrawalsTable thead th {
+  text-align: left;
+  font-size: 13px;
+  color: #667085;
+  font-weight: 700;
+  background: #f8fafc;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.withdrawalsTable tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f2f4f7;
+  vertical-align: top;
+  font-size: 14px;
+  color: #101828;
+}
+
+.withdrawalsUserCell,
+.withdrawalsDetailCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.withdrawalsUserCell strong,
+.withdrawalsDetailCell strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.withdrawalsUserCell span,
+.withdrawalsDetailCell span {
+  font-size: 12px;
+  color: #667085;
+}
+
+.withdrawalsStatus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.withdrawalsStatusPENDING {
+  background: #fff7ed;
+  color: #b54708;
+}
+
+.withdrawalsStatusAPPROVED {
+  background: #eef4ff;
+  color: #3538cd;
+}
+
+.withdrawalsStatusREJECTED {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.withdrawalsStatusPAID {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.withdrawalsNotesCell {
+  max-width: 220px;
+  color: #667085;
+}
+
+.withdrawalsActionGroup {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.withdrawalsApproveBtn,
+.withdrawalsRejectBtn,
+.withdrawalsPaidBtn {
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.withdrawalsApproveBtn {
+  background: #101828;
+  color: #fff;
+}
+
+.withdrawalsRejectBtn {
+  background: #f04438;
+  color: #fff;
+}
+
+.withdrawalsPaidBtn {
+  background: #027a48;
+  color: #fff;
+}
+
+.withdrawalsApproveBtn:disabled,
+.withdrawalsRejectBtn:disabled,
+.withdrawalsPaidBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.withdrawalsEmpty {
+  text-align: center;
+  padding: 28px !important;
+  color: #667085 !important;
+}
+
+@media (max-width: 1100px) {
+  .withdrawalsStatsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .withdrawalsPage {
+    padding: 16px;
+  }
+
+  .withdrawalsStatsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .withdrawalsHeader h1 {
+    font-size: 22px;
+  }
+
+  .withdrawalsSearchInput,
+  .withdrawalsSelect {
+    width: 100%;
+  }
+}

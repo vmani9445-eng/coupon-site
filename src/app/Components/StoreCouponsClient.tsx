@@ -179,7 +179,7 @@ export default function StoreCouponsClient({ store }: Props) {
 
   const continueToStore = () => {
     if (!selectedCoupon?.affiliateUrl) return;
-    window.location.href = selectedCoupon.affiliateUrl;
+    window.open(`/out/${coupon.id}`, "_blank");;
   };
 
   const formatDiscountDisplay = (discount: string) => {

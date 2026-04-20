@@ -4,7 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import ActivationRedirect from "@/app/components/ActivationRedirect";
-import "./activation.css";
+import "@/app/components/activation.css";
 
 type Props = {
   params: Promise<{ couponId: string }>;

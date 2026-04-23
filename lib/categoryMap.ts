@@ -456,9 +456,10 @@ function extractDomainKey(url?: string | null) {
   if (!raw) return "";
 
   try {
-    const safeUrl = raw.startsWith("http://") || raw.startsWith("https://")
-      ? raw
-      : `https://${raw}`;
+    const safeUrl =
+      raw.startsWith("http://") || raw.startsWith("https://")
+        ? raw
+        : `https://${raw}`;
 
     const hostname = new URL(safeUrl).hostname.replace(/^www\./, "");
     const root = hostname.split(".")[0] || "";

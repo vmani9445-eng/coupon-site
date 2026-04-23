@@ -1,16 +1,27 @@
 import "./globals.css";
-import Header from "./Components/header";
+import SessionTracker from "./Components/SessionTracker";
+import AuthProvider from "./Components/AuthProvider";
+import CookieConsent from "./Components/CookieConsent";
+import GoogleAnalyticsLoader from "./Components/GoogleAnalyticsLoader";
+import ConditionalNavbar from "./Components/ConditionalNavbar";
+
+import "./Components/CookieConsentStyles.css";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <AuthProvider>
+          <GoogleAnalyticsLoader />
+          <SessionTracker />
+          <ConditionalNavbar />
+          {children}
+          <CookieConsent />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import { normalizeCategory } from "@/lib/categoryMap";
 import { parsePayoutString, slugify, type CashbackKind } from "./helpers";
 
-type CuelinksRawCampaign = Record<string, any>;
+type CuelinksRawCampaign = Record<string, unknown>;
 
 export type NormalizedCampaign = {
   source: "cuelinks";
@@ -18,7 +18,7 @@ export type NormalizedCampaign = {
   cashbackAllowed: boolean;
 };
 
-function firstString(...values: unknown[]) {
+function firstString(...values: unknown[]): string {
   for (const value of values) {
     if (typeof value === "string" && value.trim()) {
       return value.trim();
@@ -27,7 +27,7 @@ function firstString(...values: unknown[]) {
   return "";
 }
 
-function firstBoolean(...values: unknown[]) {
+function firstBoolean(...values: unknown[]): boolean {
   for (const value of values) {
     if (typeof value === "boolean") return value;
 
@@ -43,179 +43,12 @@ function firstBoolean(...values: unknown[]) {
     }
   }
 
-  return null;
+  return true;
 }
 
-function normalizeText(value?: string | null) {
-  return String(value ?? "").trim().toLowerCase();
-}
-
-function getHostname(url?: string | null) {
-  if (!url) return "";
-
-  try {
-    const withProtocol =
-      url.startsWith("http://") || url.startsWith("https://")
-        ? url
-        : `https://${url}`;
-
-    return new URL(withProtocol).hostname.replace(/^www\./, "").toLowerCase();
-  } catch {
-    return "";
-  }
-}
-
-function includesAny(text: string, words: string[]) {
-  return words.some((word) => text.includes(word));
-}
-
-function isIndianCampaign(row: CuelinksRawCampaign, normalized: NormalizedCampaign) {
-  const countryText = [
-    row.country,
-    row.country_name,
-    row.countries,
-    row.region,
-    row.geo,
-    row.market,
-    row.target_country,
-    row.target_countries,
-  ]
-    .flat()
-    .map((value) => normalizeText(String(value ?? "")))
-    .join(" ");
-
-  const currencyText = [
-    row.currency,
-    row.currency_code,
-    row.payout_currency,
-    row.sale_currency,
-  ]
-    .map((value) => normalizeText(String(value ?? "")))
-    .join(" ");
-
-  const nameText = normalizeText(normalized.name);
-  const websiteHost = getHostname(normalized.websiteUrl);
-  const affiliateHost = getHostname(normalized.affiliateUrl);
-  const combinedHost = `${websiteHost} ${affiliateHost}`;
-
-  if (
-    includesAny(countryText, ["india", " in ", "inr"]) ||
-    currencyText.includes("inr")
-  ) {
-    return true;
-  }
-
-  if (
-    websiteHost.endsWith(".in") ||
-    affiliateHost.endsWith(".in") ||
-    includesAny(combinedHost, [".in", "amazon.in", "flipkart", "myntra", "ajio", "nykaa"])
-  ) {
-    return true;
-  }
-
-  if (
-    includesAny(nameText, [
-      "amazon india",
-      "flipkart",
-      "myntra",
-      "ajio",
-      "nykaa",
-      "tatacliq",
-      "tata cliq",
-      "croma",
-      "reliance digital",
-      "firstcry",
-      "meesho",
-      "bigbasket",
-      "pepperfry",
-      "netmeds",
-      "pharmeasy",
-      "paytm",
-      "airtel",
-      "jio",
-    ])
-  ) {
-    return true;
-  }
-
-  return false;
-}
-
-function isDigitalGlobalCategory(category: string) {
-  const value = normalizeText(category);
-
-  return includesAny(value, [
-    "software",
-    "saas",
-    "services",
-    "hosting",
-    "domain",
-    "education",
-    "online course",
-    "vpn",
-    "subscription",
-    "business tools",
-  ]);
-}
-
-function isAllowedGlobalMerchant(normalized: NormalizedCampaign) {
-  const nameText = normalizeText(normalized.name);
-  const hostText = `${getHostname(normalized.websiteUrl)} ${getHostname(
-    normalized.affiliateUrl
-  )}`;
-
-  return (
-    isDigitalGlobalCategory(normalized.category) ||
-    includesAny(nameText, [
-      "hostinger",
-      "namecheap",
-      "godaddy",
-      "canva",
-      "adobe",
-      "udemy",
-      "coursera",
-      "nordvpn",
-      "surfshark",
-      "grammarly",
-      "envato",
-      "wps",
-      "ipvanish",
-      "proton",
-    ]) ||
-    includesAny(hostText, [
-      "hostinger",
-      "namecheap",
-      "godaddy",
-      "canva",
-      "adobe",
-      "udemy",
-      "coursera",
-      "nordvpn",
-      "surfshark",
-      "grammarly",
-      "envato",
-      "wps.com",
-    ])
-  );
-}
-
-function shouldKeepCampaign(row: CuelinksRawCampaign, normalized: NormalizedCampaign) {
-  if (!normalized.name || !normalized.externalId) {
-    return false;
-  }
-
-  if (isIndianCampaign(row, normalized)) {
-    return true;
-  }
-
-  if (isAllowedGlobalMerchant(normalized)) {
-    return true;
-  }
-
-  return false;
-}
-
-function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign {
+function normalizeCuelinksCampaign(
+  row: CuelinksRawCampaign
+): NormalizedCampaign {
   const name = firstString(
     row.name,
     row.campaign_name,
@@ -223,8 +56,14 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
     row.store_name,
     row.store,
     row.merchant_name,
-    row.brand
+    row.brand,
+    row.title
   );
+
+  const safeName =
+    name ||
+    firstString(row.url, row.site_url, row.website_url, row.domain) ||
+    "Unknown Store";
 
   const websiteUrl =
     firstString(
@@ -243,7 +82,7 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
       row.link,
       row.deep_link,
       row.deeplink
-    ) || null;
+    ) || websiteUrl;
 
   const description =
     firstString(
@@ -266,14 +105,19 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
 
   const payout = parsePayoutString(payoutRaw);
 
-  const cashbackAllowed =
-    firstBoolean(
-      row.cashback_allowed,
-      row.incentive_allowed,
-      row.incentive_cashback_allowed,
-      row.cashback,
-      row.allow_cashback
-    ) ?? true;
+  const cashbackAllowed = firstBoolean(
+    row.cashback_allowed,
+    row.incentive_allowed,
+    row.incentive_cashback_allowed,
+    row.allow_cashback
+  );
+
+  const rawCategories =
+    Array.isArray(row.categories)
+      ? row.categories
+          .filter((item): item is string => typeof item === "string")
+          .join(", ")
+      : row.categories;
 
   return {
     source: "cuelinks",
@@ -282,10 +126,10 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
         row.campaign_id ??
         row.advertiser_id ??
         row.merchant_id ??
-        slugify(name)
+        slugify(safeName)
     ),
-    name,
-    slug: slugify(name),
+    name: safeName,
+    slug: slugify(safeName),
     logo:
       firstString(
         row.logo,
@@ -302,15 +146,15 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
       rawCategory:
         firstString(
           row.category,
-          row.categories,
+          rawCategories,
           row.vertical,
           row.segment,
           row.category_name,
           row.primary_category
         ) || null,
-      storeName: name,
+      storeName: safeName,
       websiteUrl,
-      title: name,
+      title: safeName,
       description,
     }),
     payoutKind: payout.kind,
@@ -319,61 +163,77 @@ function normalizeCuelinksCampaign(row: CuelinksRawCampaign): NormalizedCampaign
   };
 }
 
-export async function fetchCuelinksCampaigns(): Promise<NormalizedCampaign[]> {
-  const apiUrl = process.env.CUELINKS_CAMPAIGNS_URL;
-  const token = process.env.CUELINKS_API_TOKEN;
-
-  if (!apiUrl) {
-    throw new Error("Missing CUELINKS_CAMPAIGNS_URL");
+function extractRows(data: unknown): CuelinksRawCampaign[] {
+  if (Array.isArray(data)) {
+    return data.filter(
+      (row): row is CuelinksRawCampaign =>
+        typeof row === "object" && row !== null
+    );
   }
+
+  if (typeof data !== "object" || data === null) {
+    return [];
+  }
+
+  const obj = data as {
+    data?: unknown;
+    results?: unknown;
+    merchants?: unknown;
+  };
+
+  const candidate =
+    Array.isArray(obj.data) ? obj.data :
+    Array.isArray(obj.results) ? obj.results :
+    Array.isArray(obj.merchants) ? obj.merchants :
+    [];
+
+  return candidate.filter(
+    (row): row is CuelinksRawCampaign =>
+      typeof row === "object" && row !== null
+  );
+}
+
+export async function fetchCuelinksCampaigns(): Promise<NormalizedCampaign[]> {
+  const apiUrl =
+    process.env.CUELINKS_CAMPAIGNS_URL ||
+    "https://www.cuelinks.com/api/v1/all_merchants.json";
+
+  const token =
+    process.env.CUELINKS_API_TOKEN || process.env.CUELINKS_API_KEY;
 
   if (!token) {
-    throw new Error("Missing CUELINKS_API_TOKEN");
+    throw new Error("Missing CUELINKS_API_KEY");
   }
 
-  console.log("CUELINKS URL:", apiUrl);
-  console.log("CUELINKS TOKEN EXISTS:", Boolean(token));
+  console.log("CUELINKS FETCH:", apiUrl);
 
-  let res: Response;
-
-  try {
-    res = await fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${token}`,
-        Accept: "application/json",
-      },
-      cache: "no-store",
-    });
-  } catch (error: any) {
-    console.error("CUELINKS FETCH ERROR:", error);
-    throw new Error(error?.message || "Cuelinks fetch failed");
-  }
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Token ${token}`,
+      Accept: "application/json",
+    },
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     const text = await res.text();
-
-    console.log("❌ CUELINKS ERROR RESPONSE:");
-    console.log(text);
-
-    throw new Error(`Cuelinks campaigns error: ${res.status} ${text}`);
+    console.log("CUELINKS ERROR RESPONSE:", text);
+    throw new Error(`Cuelinks error: ${res.status} ${text}`);
   }
 
-  const data = await res.json();
+  const data: unknown = await res.json();
 
-  const rows: CuelinksRawCampaign[] = Array.isArray(data)
-    ? data
-    : Array.isArray(data?.results)
-      ? data.results
-      : Array.isArray(data?.data)
-        ? data.data
-        : Array.isArray(data?.campaigns)
-          ? data.campaigns
-          : Array.isArray(data?.merchants)
-            ? data.merchants
-            : [];
+  console.log(
+    "CUELINKS RESPONSE SAMPLE:",
+    JSON.stringify(data).slice(0, 1000)
+  );
+
+  const rows = extractRows(data);
 
   return rows
-    .map(normalizeCuelinksCampaign)
-    .filter((row) => row.name && row.externalId);
+    .map((row: CuelinksRawCampaign) => normalizeCuelinksCampaign(row))
+    .filter(
+      (row: NormalizedCampaign) => Boolean(row.name) && Boolean(row.externalId)
+    );
 }

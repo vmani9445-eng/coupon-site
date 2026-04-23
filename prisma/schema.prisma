@@ -58,17 +58,17 @@ model Coupon {
   adminMargin     Float?
   cashbackLabel   String?
 
-  expiresAt    DateTime?
-  verified     Boolean      @default(true)
-  isFeatured   Boolean      @default(false)
-  isActive     Boolean      @default(true)
-  status       CouponStatus @default(PUBLISHED)
-  clicks       Int          @default(0)
-  usesToday    Int          @default(0)
-  terms        Json?
-  rawPayload   Json?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  expiresAt  DateTime?
+  verified   Boolean      @default(true)
+  isFeatured Boolean      @default(false)
+  isActive   Boolean      @default(true)
+  status     CouponStatus @default(PUBLISHED)
+  clicks     Int          @default(0)
+  usesToday  Int          @default(0)
+  terms      Json?
+  rawPayload Json?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 
   store    Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   category Category? @relation(fields: [categoryId], references: [id])
@@ -82,31 +82,31 @@ model Coupon {
 }
 
 model CashbackOffer {
-  id               String       @id @default(cuid())
-  storeId          String
-  source           String
-  externalId       String?
-  title            String
-  description      String?
-  cashbackType     CashbackType
-  cashbackValue    Float
-  affiliateUrl     String
-  terms            String?
+  id            String       @id @default(cuid())
+  storeId       String
+  source        String
+  externalId    String?
+  title         String
+  description   String?
+  cashbackType  CashbackType
+  cashbackValue Float
+  affiliateUrl  String
+  terms         String?
 
   // NEW
-  networkCashback  Float?       // e.g. 7.5
-  userCashback     Float?       // e.g. 5
-  adminMargin      Float?       // e.g. 2.5
-  cashbackLabel    String?      // e.g. "Up to 5%"
+  networkCashback Float? // e.g. 7.5
+  userCashback    Float? // e.g. 5
+  adminMargin     Float? // e.g. 2.5
+  cashbackLabel   String? // e.g. "Up to 5%"
 
-  isFeatured       Boolean      @default(false)
-  isActive         Boolean      @default(true)
-  startsAt         DateTime?
-  endsAt           DateTime?
-  clicks           Int          @default(0)
-  rawPayload       Json?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  isFeatured Boolean   @default(false)
+  isActive   Boolean   @default(true)
+  startsAt   DateTime?
+  endsAt     DateTime?
+  clicks     Int       @default(0)
+  rawPayload Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   store                Store                 @relation(fields: [storeId], references: [id], onDelete: Cascade)
   clickLogs            ClickLog[]

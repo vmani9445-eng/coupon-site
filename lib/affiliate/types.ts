@@ -18,7 +18,7 @@ export type NormalizedCashback = {
   storeName: string;
   title: string;
   description?: string;
-  cashbackType: "percent" | "flat";
+  cashbackType: "PERCENT" | "flat";
   cashbackValue: number;
   affiliateUrl: string;
   startsAt?: Date | null;

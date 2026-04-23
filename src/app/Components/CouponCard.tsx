@@ -13,6 +13,9 @@ type Coupon = {
   verified?: boolean;
   bank?: string;
   expiresAt?: string;
+  affiliateUrl?: string;
+  storeId?: string;
+  storeSlug?: string;
 };
 
 type CouponCardProps = {
@@ -25,6 +28,7 @@ export default function CouponCard({
   storeName = "Store",
 }: CouponCardProps) {
   const [showCode, setShowCode] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
 
   const title =
     typeof coupon.title === "string" && coupon.title.trim() !== ""
@@ -67,6 +71,53 @@ export default function CouponCard({
   const usersText =
     typeof coupon.users === "number" ? `${coupon.users} used today` : "All users";
 
+  const affiliateUrl =
+    typeof coupon.affiliateUrl === "string" && coupon.affiliateUrl.trim() !== ""
+      ? coupon.affiliateUrl.trim()
+      : "";
+
+  async function handleCouponClick() {
+    setShowCode(true);
+
+    if (!affiliateUrl || isTracking) return;
+
+    try {
+      setIsTracking(true);
+
+      const res = await fetch("/api/track-click", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clickType: hasCode ? "COUPON" : "STORE",
+          couponId: coupon.id ? String(coupon.id) : null,
+          storeId: coupon.storeId ? String(coupon.storeId) : null,
+          targetUrl: affiliateUrl,
+          storeSlug: coupon.storeSlug || null,
+          trackingParamKey: "subid",
+          sourcePage:
+            typeof window !== "undefined" ? window.location.pathname : null,
+          sourceLabel: hasCode ? "show_coupon" : "get_deal",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data?.ok && data?.redirectUrl) {
+        window.open(data.redirectUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      window.open(affiliateUrl, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error("Failed to track click:", error);
+      window.open(affiliateUrl, "_blank", "noopener,noreferrer");
+    } finally {
+      setIsTracking(false);
+    }
+  }
+
   return (
     <article className="couponCardUiClean">
       <div className="couponLeftClean">
@@ -101,9 +152,14 @@ export default function CouponCard({
         <button
           type="button"
           className="couponShowBtnClean"
-          onClick={() => setShowCode(true)}
+          onClick={handleCouponClick}
+          disabled={isTracking || !affiliateUrl}
         >
-          {hasCode ? "Show Coupon" : "Get Deal"}
+          {isTracking
+            ? "Opening..."
+            : hasCode
+            ? "Show Coupon"
+            : "Get Deal"}
         </button>
 
         <div className="couponCodeHintClean">

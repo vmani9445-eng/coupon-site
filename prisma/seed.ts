@@ -53,7 +53,6 @@ const storesData = [
     isFeatured: true,
     isActive: true,
   },
-
   {
     name: "Tata Cliq",
     slug: "tata-cliq",
@@ -190,6 +189,7 @@ const storesData = [
     isActive: true,
   },
 ];
+
 async function main() {
   await prisma.offerClick.deleteMany();
   await prisma.couponSubmission.deleteMany();
@@ -202,115 +202,9 @@ async function main() {
   });
 
   const stores = await prisma.store.findMany();
-  const storeMap = Object.fromEntries(stores.map((store) => [store.slug, store]));
-
-  await prisma.coupon.createMany({
-    data: [
-      {
-        storeId: storeMap.amazon.id,
-        source: "manual",
-        externalId: "manual-amazon-1",
-        title: "Save 40% on Mobile Accessories",
-        description: "Limited-time mobile accessories deal.",
-        code: "AMZ40",
-        discount: "40% OFF",
-        category: "Electronics",
-        bank: "15% Instant Discount on Axis Card",
-        affiliateUrl: "/go/coupon/demo-amazon-1",
-        verified: true,
-        isFeatured: true,
-        isActive: true,
-        status: "PUBLISHED",
-        clicks: 0,
-        usesToday: 67,
-      },
-      {
-        storeId: storeMap.flipkart.id,
-        source: "manual",
-        externalId: "manual-flipkart-1",
-        title: "Flat 20% Off on Fashion",
-        description: "Extra style savings on selected fashion items.",
-        code: "STYLE20",
-        discount: "20% OFF",
-        category: "Fashion",
-        bank: "10% Instant Discount on ICICI Card",
-        affiliateUrl: "/go/coupon/demo-flipkart-1",
-        verified: true,
-        isFeatured: true,
-        isActive: true,
-        status: "PUBLISHED",
-        clicks: 0,
-        usesToday: 34,
-      },
-      {
-        storeId: storeMap.myntra.id,
-        source: "manual",
-        externalId: "manual-myntra-1",
-        title: "Buy 2 Get 1 Free on T-Shirts",
-        description: "Applies on selected fashion collection.",
-        code: "B2G1TEE",
-        discount: "BUY 2 GET 1",
-        category: "Fashion",
-        affiliateUrl: "/go/coupon/demo-myntra-1",
-        verified: true,
-        isFeatured: true,
-        isActive: true,
-        status: "PUBLISHED",
-        clicks: 0,
-        usesToday: 25,
-      },
-      {
-        storeId: storeMap.nykaa.id,
-        source: "manual",
-        externalId: "manual-nykaa-1",
-        title: "Flat 15% Off on Beauty Essentials",
-        description: "Limited-time offer on skincare and makeup.",
-        code: "NYK15",
-        discount: "15% OFF",
-        category: "Beauty",
-        affiliateUrl: "/go/coupon/demo-nykaa-1",
-        verified: true,
-        isFeatured: true,
-        isActive: true,
-        status: "PUBLISHED",
-        clicks: 0,
-        usesToday: 44,
-      },
-    ],
-  });
-
-  await prisma.cashbackOffer.createMany({
-    data: [
-      {
-        storeId: storeMap.amazon.id,
-        source: "manual",
-        externalId: "manual-cb-amazon-1",
-        title: "Extra 3% Cashback on Electronics",
-        description: "Activate cashback before shopping on electronics.",
-        cashbackType: "percent",
-        cashbackValue: 3,
-        affiliateUrl: "/go/cashback/demo-cb-amazon-1",
-        terms: "Valid on eligible products only.",
-        isFeatured: true,
-        isActive: true,
-      },
-      {
-        storeId: storeMap.flipkart.id,
-        source: "manual",
-        externalId: "manual-cb-flipkart-1",
-        title: "5% Cashback on Fashion",
-        description: "Activate cashback for selected fashion purchases.",
-        cashbackType: "percent",
-        cashbackValue: 5,
-        affiliateUrl: "/go/cashback/demo-cb-flipkart-1",
-        terms: "Cashback tracked on eligible orders.",
-        isFeatured: true,
-        isActive: true,
-      },
-    ],
-  });
 
   console.log(`Seeded ${stores.length} stores successfully.`);
+  console.log("No demo coupons or demo cashback offers were inserted.");
 }
 
 main()

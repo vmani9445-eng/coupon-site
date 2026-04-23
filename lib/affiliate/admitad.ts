@@ -250,7 +250,7 @@ export async function getAdmitadAccessToken() {
   form.set("grant_type", "client_credentials");
   form.set("client_id", clientId);
   form.set("client_secret", clientSecret);
-  form.set("scope", "advcampaigns public_data");
+form.set("scope", "advcampaigns");
 
   const res = await fetch("https://api.admitad.com/token/", {
     method: "POST",

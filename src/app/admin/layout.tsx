@@ -129,7 +129,16 @@ export default function AdminLayout({
             Withdrawals
           </Link>
         </div>
+<div className="adminNavSection">
+  <span className="adminNavLabel">Account</span>
 
+  <Link
+    href="/admin/change-password"
+    className={isActive("/admin/change-password") ? "active" : ""}
+  >
+    Change Password
+  </Link>
+</div>
         <button className="adminLogoutBtn" onClick={handleLogout}>
           Logout
         </button>

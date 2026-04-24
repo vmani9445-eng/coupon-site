@@ -15,6 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* 🔴 Paste your Admitad meta tag here */}
+<meta name="verify-admitad" content="4d7b22a8e9" />
+      </head>
+
       <body className="layoutBody">
         <AuthProvider>
           <GoogleAnalyticsLoader />

@@ -4,6 +4,7 @@ import AuthProvider from "./Components/AuthProvider";
 import CookieConsent from "./Components/CookieConsent";
 import GoogleAnalyticsLoader from "./Components/GoogleAnalyticsLoader";
 import ConditionalNavbar from "./Components/ConditionalNavbar";
+import Footer from "./Components/Footer";
 
 import "./Components/CookieConsentStyles.css";
 
@@ -14,12 +15,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="layoutBody">
         <AuthProvider>
           <GoogleAnalyticsLoader />
           <SessionTracker />
+
           <ConditionalNavbar />
-          {children}
+
+          <main className="layoutMain">{children}</main>
+
+          <Footer />
+
           <CookieConsent />
         </AuthProvider>
       </body>
